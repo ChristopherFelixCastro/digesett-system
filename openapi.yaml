@@ -1,0 +1,5 @@
+openapi: "3.0.3"
+info:
+  title: DIGESETT API
+  version: "1.0.0"
+  description: "Contrato de integración del Sistema Digital DIGESETT — pendiente de definición final (Semana 2)"
