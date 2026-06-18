@@ -1,0 +1,11 @@
+# Variables de entorno — nunca a GitHub
+.env
+.env.development
+.env.local
+.env.production
+
+# Dependencias
+node_modules/
+
+# Build
+dist/
