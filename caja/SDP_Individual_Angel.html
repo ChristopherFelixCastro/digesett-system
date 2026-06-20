@@ -1,0 +1,1013 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDP Individual — Ángel · App de Caja y Fiscalización</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:        #0D1F0F;
+  --ink-mid:    #1A3A1D;
+  --ink-soft:   #2D4A30;
+  --green:      #166534;
+  --green-mid:  #15803D;
+  --green-lt:   #16A34A;
+  --sage:       #F0FDF4;
+  --sage-mid:   #DCFCE7;
+  --teal:       #0F766E;
+  --teal-lt:    #CCFBF1;
+  --amber:      #B45309;
+  --amber-lt:   #FEF3C7;
+  --red:        #B91C1C;
+  --red-lt:     #FEE2E2;
+  --blue:       #1D4ED8;
+  --blue-lt:    #DBEAFE;
+  --slate:      #64748B;
+  --border:     #E2E8F0;
+  --bg:         #F7FAF7;
+  --white:      #FFFFFF;
+  --fh: 'Fraunces', Georgia, serif;
+  --fb: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--ink);line-height:1.7}
+
+/* ── COVER ─────────────────────────── */
+.cover{
+  min-height:100vh;display:flex;flex-direction:column;
+  background:var(--ink);position:relative;overflow:hidden;
+}
+.cover-texture{
+  position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(22,163,74,.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(15,118,110,.15) 0%, transparent 50%),
+    repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(255,255,255,.02) 80px, rgba(255,255,255,.02) 81px);
+}
+.cover-top{
+  position:relative;z-index:2;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.5rem 3.5rem;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.cover-top-tag{font-family:var(--fm);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.cover-top-id{font-family:var(--fm);font-size:.68rem;color:#86EFAC;letter-spacing:.08em}
+.cover-body{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:4rem 3.5rem;position:relative;z-index:2;
+}
+.cover-chip{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(22,163,74,.2);border:1px solid rgba(134,239,172,.25);
+  color:#86EFAC;font-size:.75rem;font-weight:500;letter-spacing:.08em;
+  text-transform:uppercase;padding:.4rem 1rem;border-radius:20px;
+  margin-bottom:2rem;width:fit-content;
+}
+.cover-chip-dot{width:6px;height:6px;border-radius:50%;background:#4ADE80}
+.cover-name{
+  font-family:var(--fh);font-size:4.8rem;font-weight:800;
+  color:var(--white);line-height:1;margin-bottom:.5rem;
+}
+.cover-name em{color:#4ADE80;font-style:italic}
+.cover-module{
+  font-size:1.5rem;font-weight:300;color:rgba(255,255,255,.4);
+  margin-bottom:2.5rem;
+}
+.cover-desc{
+  max-width:560px;font-size:.95rem;font-weight:300;
+  color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:3rem;
+}
+.cover-stats{display:flex;gap:3rem;border-top:1px solid rgba(255,255,255,.07);padding-top:2rem}
+.cover-stat{display:flex;flex-direction:column;gap:.3rem}
+.cover-stat-n{font-family:var(--fm);font-size:1.5rem;font-weight:600;color:#4ADE80}
+.cover-stat-l{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.28)}
+.cover-foot{
+  position:relative;z-index:2;padding:1.25rem 3.5rem;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.cover-foot-l{font-size:.74rem;color:rgba(255,255,255,.22)}
+.cover-foot-r{font-family:var(--fm);font-size:.68rem;color:#86EFAC}
+
+/* ── LAYOUT ─────────────────────────── */
+.page{max-width:1000px;margin:0 auto;padding:3rem 2rem 6rem}
+
+/* ── SECTION ─────────────────────────── */
+.sec{background:var(--white);border:1px solid var(--border);border-radius:10px;margin-bottom:2rem;overflow:hidden;box-shadow:0 1px 4px rgba(13,31,15,.06)}
+.sec-hd{
+  padding:1.25rem 2rem;display:flex;align-items:center;gap:.9rem;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,#F0FDF4 0%,var(--white) 100%);
+}
+.sec-num{
+  font-family:var(--fm);font-size:.65rem;font-weight:600;
+  background:var(--green);color:var(--white);
+  padding:.22rem .6rem;border-radius:4px;letter-spacing:.06em;
+}
+.sec-title{font-family:var(--fh);font-size:1.22rem;color:var(--ink)}
+.sec-body{padding:1.75rem 2rem}
+
+/* ── TYPOGRAPHY ─────────────────────────── */
+h3{
+  font-family:var(--fb);font-size:.78rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--green);
+  margin-bottom:.75rem;padding-bottom:.4rem;
+  border-bottom:2px solid var(--sage-mid);
+}
+h4{font-size:.88rem;font-weight:600;color:var(--ink-mid);margin:1.25rem 0 .45rem}
+p{font-size:.88rem;color:var(--ink-soft);margin-bottom:.8rem;line-height:1.75}
+p:last-child{margin-bottom:0}
+strong{color:var(--ink);font-weight:600}
+ul,ol{padding-left:1.4rem;margin-bottom:.8rem}
+li{font-size:.86rem;color:var(--ink-soft);margin-bottom:.35rem;line-height:1.65}
+li strong{color:var(--ink)}
+
+/* ── TABLES ─────────────────────────── */
+.tw{overflow-x:auto;margin:.9rem 0}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead tr{background:var(--ink)}
+thead th{padding:.65rem .9rem;text-align:left;color:var(--white);font-weight:500;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+tbody tr{border-bottom:1px solid var(--border)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:nth-child(even){background:#F7FAF7}
+tbody td{padding:.6rem .9rem;color:var(--ink-soft);vertical-align:top;font-size:.82rem}
+tbody td:first-child{font-weight:500;color:var(--ink-mid)}
+
+/* ── CODE ─────────────────────────── */
+code{font-family:var(--fm);font-size:.78rem;background:#F0FDF4;color:var(--green-mid);padding:.1rem .38rem;border-radius:3px;border:1px solid #BBF7D0}
+pre{
+  background:var(--ink);color:#86EFAC;font-family:var(--fm);
+  font-size:.76rem;padding:1.2rem 1.4rem;border-radius:8px;
+  overflow-x:auto;margin:1rem 0;line-height:1.65;
+  border-left:3px solid var(--green-lt);
+}
+pre .k{color:#FCD34D}
+pre .s{color:#6EE7B7}
+pre .c{color:#4B5563;font-style:italic}
+pre .t{color:#86EFAC}
+
+/* ── CALLOUTS ─────────────────────────── */
+.note{border-left:3px solid;padding:.8rem 1.1rem;border-radius:0 6px 6px 0;margin:.9rem 0;font-size:.85rem;line-height:1.65}
+.note-green{border-color:var(--green-lt);background:var(--sage)}
+.note-green strong{color:var(--green)}
+.note-teal{border-color:var(--teal);background:var(--teal-lt)}
+.note-teal strong{color:var(--teal)}
+.note-amber{border-color:var(--amber);background:var(--amber-lt)}
+.note-amber strong{color:var(--amber)}
+.note-red{border-color:var(--red);background:var(--red-lt)}
+.note-red strong{color:var(--red)}
+.note-blue{border-color:var(--blue);background:var(--blue-lt)}
+.note-blue strong{color:var(--blue)}
+
+/* ── BADGES ─────────────────────────── */
+.b{display:inline-block;font-size:.67rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:.16rem .5rem;border-radius:3px;vertical-align:middle}
+.b-g{background:var(--sage-mid);color:var(--green)}
+.b-t{background:var(--teal-lt);color:var(--teal)}
+.b-a{background:var(--amber-lt);color:var(--amber)}
+.b-r{background:var(--red-lt);color:var(--red)}
+.b-b{background:var(--blue-lt);color:var(--blue)}
+.b-s{background:#F1F5F9;color:var(--slate)}
+
+/* ── STEPS ─────────────────────────── */
+.steps{display:flex;flex-direction:column;gap:.75rem;margin:.9rem 0}
+.step{display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.1rem;border:1px solid var(--border);border-radius:8px;background:#FAFDF9}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--green);color:var(--white);font-family:var(--fm);font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem}
+.step-title{font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:.2rem}
+.step-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.6}
+
+/* ── MODE CARDS ─────────────────────────── */
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:.9rem 0}
+.mode-card{border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.mode-hd{padding:.85rem 1.2rem;display:flex;align-items:center;gap:.75rem}
+.mode-hd-handheld{background:linear-gradient(135deg,#166534,#15803D)}
+.mode-hd-caja{background:linear-gradient(135deg,#0F766E,#0D9488)}
+.mode-icon{font-size:1.4rem}
+.mode-title{font-family:var(--fh);font-size:1rem;color:var(--white)}
+.mode-sub{font-size:.72rem;color:rgba(255,255,255,.6);font-weight:300}
+.mode-body{padding:1rem 1.2rem;background:var(--white)}
+.mode-feat{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.5rem;font-size:.82rem;color:var(--ink-soft)}
+.mode-feat::before{content:'✓';color:var(--green-lt);font-weight:700;flex-shrink:0;margin-top:.05rem}
+.mode-feat:last-child{margin-bottom:0}
+
+/* ── SCREEN MOCKUP ─────────────────────────── */
+.screen{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:.9rem 0}
+.screen-bar{background:var(--ink-mid);padding:.55rem 1rem;display:flex;align-items:center;gap:.5rem}
+.screen-dot{width:8px;height:8px;border-radius:50%}
+.screen-title{font-family:var(--fm);font-size:.7rem;color:rgba(255,255,255,.5);margin-left:.3rem}
+.screen-body{padding:1.1rem 1.25rem;background:#FAFDF9;font-size:.82rem}
+.screen-field{display:flex;align-items:baseline;gap:.5rem;margin-bottom:.45rem;padding-bottom:.45rem;border-bottom:1px solid var(--border)}
+.screen-field:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.screen-label{font-size:.72rem;font-weight:600;color:var(--slate);min-width:140px;flex-shrink:0;text-transform:uppercase;letter-spacing:.05em}
+.screen-value{font-size:.82rem;color:var(--ink-soft)}
+.screen-value code{font-size:.75rem}
+
+/* ── SYNC FLOW ─────────────────────────── */
+.sync-flow{display:flex;flex-direction:column;gap:0;margin:.9rem 0;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.sync-step{display:flex;align-items:flex-start;gap:1rem;padding:.9rem 1.2rem;border-bottom:1px solid var(--border);background:var(--white)}
+.sync-step:last-child{border-bottom:none}
+.sync-step:nth-child(even){background:#FAFDF9}
+.sync-indicator{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fm);font-size:.7rem;font-weight:600;
+  color:var(--white);flex-shrink:0;margin-top:.1rem;
+}
+.si-online{background:var(--green-lt)}
+.si-offline{background:var(--amber)}
+.si-sync{background:var(--teal)}
+.si-error{background:var(--red)}
+.sync-content{}
+.sync-state{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2rem}
+.sync-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.6}
+
+/* ── WEEK CARDS ─────────────────────────── */
+.wk-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.9rem 0}
+.wk{border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.wk-hd{padding:.65rem 1rem;background:linear-gradient(135deg,var(--green) 0%,var(--green-lt) 100%);display:flex;justify-content:space-between;align-items:center}
+.wk-label{font-family:var(--fm);font-size:.72rem;font-weight:600;color:var(--white);letter-spacing:.06em}
+.wk-tag{font-size:.68rem;color:rgba(255,255,255,.65)}
+.wk-body{padding:.85rem 1rem;background:var(--white)}
+.wk-task{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.55rem}
+.wk-task:last-child{margin-bottom:0}
+.wk-bullet{width:5px;height:5px;border-radius:50%;background:var(--green-lt);flex-shrink:0;margin-top:.52rem}
+.wk-task-txt{font-size:.8rem;color:var(--ink-soft);line-height:1.55}
+.wk-task-txt strong{color:var(--ink)}
+
+/* ── DEP GRID ─────────────────────────── */
+.dep-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.9rem 0}
+.dep-card{border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;background:#FAFDF9}
+.dep-dir{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-bottom:.5rem}
+.dep-person{font-size:.88rem;font-weight:600;color:var(--ink);margin-bottom:.5rem}
+.dep-items{display:flex;flex-direction:column;gap:.3rem}
+.dep-item{font-size:.78rem;color:var(--ink-soft);display:flex;gap:.5rem;align-items:baseline}
+.dep-item::before{content:'→';color:var(--green-lt);font-weight:700;flex-shrink:0}
+
+@media(max-width:700px){
+  .cover-name{font-size:3.2rem}.cover-body{padding:3rem 2rem}
+  .cover-top,.cover-foot{padding:1.2rem 1.5rem}
+  .wk-grid,.dep-grid,.mode-grid{grid-template-columns:1fr}
+  .sec-body{padding:1.25rem 1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ COVER ══════════ -->
+<div class="cover">
+  <div class="cover-texture"></div>
+
+  <div class="cover-top">
+    <span class="cover-top-tag">SDP Individual · Sistema Digital DIGESETT</span>
+    <span class="cover-top-id">DOC-SDP-DIGESETT-IND-ANGEL-V1.0</span>
+  </div>
+
+  <div class="cover-body">
+    <div class="cover-chip">
+      <span class="cover-chip-dot"></span>
+      App de Caja · Fiscalización · Offline-First
+    </div>
+    <h1 class="cover-name"><em>Ángel</em></h1>
+    <p class="cover-module">App de Caja y Fiscalización — WinForms Desktop</p>
+    <p class="cover-desc">
+      Este documento describe de forma procedimental y accionable todo lo que debes construir: la app de escritorio con dos modos de operación (handheld en calle y caja física), la base de datos local cifrada, y el mecanismo de sincronización automática offline.
+    </p>
+    <div class="cover-stats">
+      <div class="cover-stat"><span class="cover-stat-n">2</span><span class="cover-stat-l">Modos de operación</span></div>
+      <div class="cover-stat"><span class="cover-stat-n">7</span><span class="cover-stat-l">Requisitos funcionales</span></div>
+      <div class="cover-stat"><span class="cover-stat-n">8</span><span class="cover-stat-l">Semanas</span></div>
+      <div class="cover-stat"><span class="cover-stat-n">AES-256</span><span class="cover-stat-l">Cifrado local</span></div>
+    </div>
+  </div>
+
+  <div class="cover-foot">
+    <span class="cover-foot-l">Sistema Digital DIGESETT · Proyecto Académico de Ingeniería de Software</span>
+    <span class="cover-foot-r">DOC-SDP-DIGESETT-IND-ANGEL-V1.0</span>
+  </div>
+</div>
+
+<!-- ══════════ DOCUMENTO ══════════ -->
+<main class="page">
+
+<!-- ─── 1. Tu rol ─── -->
+<div class="sec" id="s1">
+  <div class="sec-hd"><span class="sec-num">01</span><h2 class="sec-title">Tu Rol en el Sistema</h2></div>
+  <div class="sec-body">
+    <h3>¿Qué eres exactamente?</h3>
+    <p>Tu módulo es la <strong>cara operativa del sistema en el mundo físico</strong>. Mientras Christopher maneja el portal web para los ciudadanos, tú manejas las dos situaciones donde el agente o cajero trabaja cara a cara con la realidad: en la calle levantando multas y en la ventanilla cobrándolas.</p>
+    <p>Lo que hace único y complejo tu módulo es que debe funcionar <strong>aunque no haya internet</strong>. Un agente de tránsito no puede detenerse en el medio de la Avenida 27 de Febrero porque el servidor no responde. Tu app guarda todo localmente en una base de datos cifrada y lo envía al sistema central cuando recupera señal — completamente automático, sin que el agente haga nada extra.</p>
+
+    <div class="mode-grid">
+      <div class="mode-card">
+        <div class="mode-hd mode-hd-handheld">
+          <span class="mode-icon">📱</span>
+          <div>
+            <div class="mode-title">Modo Handheld</div>
+            <div class="mode-sub">Agente en la vía pública</div>
+          </div>
+        </div>
+        <div class="mode-body">
+          <div class="mode-feat">Levantamiento de actas de infracción en la calle</div>
+          <div class="mode-feat">Consulta de placa y cédula via mocks de Yeimi (cuando hay internet)</div>
+          <div class="mode-feat">Guardado offline en SQLite cifrado cuando no hay señal</div>
+          <div class="mode-feat">Sincronización automática al recuperar conexión</div>
+          <div class="mode-feat">Historial de actas del turno activo</div>
+        </div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-hd mode-hd-caja">
+          <span class="mode-icon">🏧</span>
+          <div>
+            <div class="mode-title">Modo Caja</div>
+            <div class="mode-sub">Cajero en ventanilla</div>
+          </div>
+        </div>
+        <div class="mode-body">
+          <div class="mode-feat">Apertura de caja con registro del monto inicial del día</div>
+          <div class="mode-feat">Cobro de multas con desglose de conceptos</div>
+          <div class="mode-feat">Registro de entradas y salidas de efectivo</div>
+          <div class="mode-feat">Impresión o visualización de recibo de pago</div>
+          <div class="mode-feat">Cuadre y cierre de caja al final del turno</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note note-blue">
+      <strong>ℹ Tu relación con el resto del sistema:</strong> Tu app siempre habla con el <strong>middleware de Yeimi</strong> (puerto 6001), nunca directamente con el Core de Antony. Cuando hay internet, tus peticiones llegan a Yeimi y él las reenvía al Core. Cuando no hay internet, guardas el dato localmente y Yeimi lo recibe automáticamente después. Tú nunca necesitas saber qué hay detrás de Yeimi.
+    </div>
+  </div>
+</div>
+
+<!-- ─── 2. Stack ─── -->
+<div class="sec" id="s2">
+  <div class="sec-hd"><span class="sec-num">02</span><h2 class="sec-title">Tu Stack Tecnológico</h2></div>
+  <div class="sec-body">
+    <h3>Tecnologías que usarás</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Qué</th><th>Tecnología</th><th>Para qué sirve en tu módulo</th></tr></thead>
+        <tbody>
+          <tr><td>Framework de UI</td><td>Windows Forms (WinForms) con C# / .NET 8</td><td>El framework de escritorio nativo de .NET. Cada pantalla es un Form. Permite construir interfaces rápidas con drag-and-drop en Visual Studio sin curva de aprendizaje móvil.</td></tr>
+          <tr><td>Base de datos local</td><td>SQLite (vía NuGet: Microsoft.Data.Sqlite)</td><td>BD embebida de un solo archivo. No necesita servidor. Se crea automáticamente en la carpeta de la app al primer arranque. Ideal para almacenar actas offline.</td></tr>
+          <tr><td>Cifrado de la BD</td><td>SQLCipher (vía NuGet: SQLitePCLRaw.bundle_sqlcipher)</td><td>Extiende SQLite añadiendo cifrado AES-256 transparente al archivo .db. El archivo es ilegible sin la clave correcta.</td></tr>
+          <tr><td>Derivación de clave</td><td>PBKDF2 — System.Security.Cryptography (.NET nativo)</td><td>Genera la clave de cifrado AES-256 combinando el password del agente y el ID del dispositivo. No requiere librería externa.</td></tr>
+          <tr><td>Cliente HTTP</td><td>HttpClient de .NET (nativo)</td><td>Para hacer peticiones REST al middleware de Yeimi en http://localhost:6001. Ya viene incluido en .NET 8.</td></tr>
+          <tr><td>Monitoreo de red</td><td>System.Net.NetworkInformation (.NET nativo)</td><td>Para detectar cuándo el dispositivo recupera conectividad y disparar la sincronización automática.</td></tr>
+          <tr><td>Serialización JSON</td><td>System.Text.Json (.NET nativo)</td><td>Para serializar las actas a JSON antes de guardarlas en SQLite y al enviarlas a Yeimi.</td></tr>
+          <tr><td>Generación de UUID</td><td>Guid.NewGuid() (.NET nativo)</td><td>Para generar el identificador único de cada acta en el dispositivo, garantizando que no haya colisiones al sincronizar.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Configuración inicial del proyecto</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Crear el proyecto WinForms en Visual Studio</div>
+          <div class="step-desc">Nuevo proyecto → Aplicación de Windows Forms (.NET 8). Nómbralo <code>Digesett.Caja</code>. Colócalo en la carpeta <code>/caja</code> del monorepo.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Instalar paquetes NuGet</div>
+          <div class="step-desc">
+            En la Consola del Administrador de Paquetes:<br>
+            <code>Install-Package Microsoft.Data.Sqlite</code><br>
+            <code>Install-Package SQLitePCLRaw.bundle_sqlcipher</code><br>
+            Estos dos paquetes juntos habilitan SQLite con cifrado SQLCipher.
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Crear la carpeta de datos de la app</div>
+          <div class="step-desc">Al iniciar la app por primera vez, crea automáticamente la carpeta <code>%AppData%\Digesett\</code> donde se guardará el archivo SQLite cifrado. Usa <code>Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)</code>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Configurar la URL base del middleware</div>
+          <div class="step-desc">En un archivo <code>appsettings.json</code> junto al ejecutable, guarda la URL de Yeimi: <code>"MiddlewareUrl": "http://localhost:6001"</code>. Así si la URL cambia, solo se modifica ese archivo.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 3. Base de datos local ─── -->
+<div class="sec" id="s3">
+  <div class="sec-hd"><span class="sec-num">03</span><h2 class="sec-title">Base de Datos Local — SQLite + SQLCipher</h2></div>
+  <div class="sec-body">
+    <h3>El mecanismo de cifrado paso a paso</h3>
+    <p>Esta es la parte más crítica de tu módulo en términos de seguridad. La clave de cifrado nunca se guarda en disco — se recrea cada vez que el agente inicia sesión.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">El agente ingresa su password en la pantalla de login</div>
+          <div class="step-desc">Capturas el password en texto plano temporalmente en memoria. <strong>Nunca lo guardes en ningún archivo ni variable global.</strong></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Obtienes el ID único del dispositivo</div>
+          <div class="step-desc">Usa la dirección MAC de la tarjeta de red principal o el número de serie del procesador como sal única por dispositivo.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Derivas la clave con PBKDF2</div>
+          <div class="step-desc">Combinas password + ID del dispositivo para generar 32 bytes (256 bits) de clave. La clave vive solo en memoria RAM mientras la app está abierta.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Abres la BD SQLite con esa clave</div>
+          <div class="step-desc">La clave se pasa al string de conexión de SQLCipher. SQLite abre o crea el archivo cifrado. Si la clave es incorrecta, la BD no abre — los datos son ilegibles.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Al cerrar la app, la clave desaparece</div>
+          <div class="step-desc">Como la clave solo existía en memoria RAM y no se guardó en disco, al cerrar la app o apagar el dispositivo, la clave se volatiliza. El archivo SQLite queda ilegible hasta el próximo login.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Código de derivación de clave en C#</h3>
+    <pre>
+<span class="k">using</span> System.Security.Cryptography;
+<span class="k">using</span> System.Net.NetworkInformation;
+
+<span class="k">private static string</span> DerivarClave(<span class="k">string</span> password)
+{
+  <span class="c">// Obtener ID único del dispositivo (dirección MAC)</span>
+  <span class="k">var</span> mac = NetworkInterface.GetAllNetworkInterfaces()
+    .Where(n => n.OperationalStatus == OperationalStatus.Up)
+    .Select(n => n.GetPhysicalAddress().ToString())
+    .FirstOrDefault() ?? <span class="s">"DIGESETT_FALLBACK_SALT"</span>;
+
+  <span class="c">// Derivar clave con PBKDF2 — 100,000 iteraciones (estándar NIST)</span>
+  <span class="k">var</span> claveBytes = Rfc2898DeriveBytes.Pbkdf2(
+    password:    System.Text.Encoding.UTF8.GetBytes(password),
+    salt:        System.Text.Encoding.UTF8.GetBytes(mac),
+    iterations:  100_000,
+    hashAlgorithm: HashAlgorithmName.SHA256,
+    outputLength:  32  <span class="c">// 256 bits para AES-256</span>
+  );
+
+  <span class="c">// Convertir a string hexadecimal para pasarlo a SQLCipher</span>
+  <span class="k">return</span> Convert.ToHexString(claveBytes);
+}
+
+<span class="c">// Abrir la BD con la clave derivada</span>
+<span class="k">private static string</span> ObtenerConnectionString(<span class="k">string</span> clave)
+{
+  <span class="k">var</span> dbPath = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+    <span class="s">"Digesett"</span>, <span class="s">"actas_local.db"</span>
+  );
+  <span class="k">return</span> <span class="s">$"Data Source={dbPath};Password={clave};"</span>;
+}</pre>
+
+    <h3>Tablas de tu SQLite local</h3>
+    <p>Crea estas tablas la primera vez que abres la BD. Puedes hacerlo en un método <code>InicializarBD()</code> que se llama al arrancar la app:</p>
+    <pre>
+<span class="c">-- Tabla principal: actas levantadas en la handheld</span>
+<span class="t">CREATE TABLE IF NOT EXISTS</span> Borradores_Actas (
+  id                     <span class="t">TEXT</span> PRIMARY KEY,    <span class="c">-- UUID generado en el dispositivo</span>
+  conductor_cedula       <span class="t">TEXT</span> NULL,
+  conductor_nombre       <span class="t">TEXT</span> NULL,
+  tipo_infraccion_codigo <span class="t">TEXT</span> NOT NULL,
+  tipo_infraccion_desc   <span class="t">TEXT</span> NOT NULL,
+  monto_base             <span class="t">REAL</span> NOT NULL,
+  placa                  <span class="t">TEXT</span> NULL,
+  url_evidencia          <span class="t">TEXT</span> NULL,
+  descripcion_vehiculo   <span class="t">TEXT</span> NULL,         <span class="c">-- para vehículo no identificado</span>
+  requiere_retencion     <span class="t">INTEGER</span> NOT NULL DEFAULT 0,
+  grua_numero            <span class="t">TEXT</span> NULL,          <span class="c">-- si requiere retención</span>
+  fecha_hecho            <span class="t">TEXT</span> NOT NULL,       <span class="c">-- ISO 8601, timestamp del dispositivo</span>
+  agente_id              <span class="t">TEXT</span> NOT NULL,
+  estado_sync            <span class="t">TEXT</span> NOT NULL DEFAULT 'PENDIENTE', <span class="c">-- PENDIENTE/ENVIADO/ERROR</span>
+  timestamp_firma        <span class="t">TEXT</span> NULL,           <span class="c">-- se llena al "Firmar y Emitir"</span>
+  error_detalle          <span class="t">TEXT</span> NULL
+);
+
+<span class="c">-- Catálogo de infracciones (se sincroniza desde Yeimi al conectar)</span>
+<span class="t">CREATE TABLE IF NOT EXISTS</span> Infracciones_Cache (
+  id       <span class="t">INTEGER</span> PRIMARY KEY,
+  codigo   <span class="t">TEXT</span> NOT NULL UNIQUE,
+  descripcion        <span class="t">TEXT</span> NOT NULL,
+  categoria          <span class="t">TEXT</span> NOT NULL,
+  monto_particular   <span class="t">REAL</span> NOT NULL,
+  monto_motocicleta  <span class="t">REAL</span> NOT NULL,
+  monto_carga        <span class="t">REAL</span> NOT NULL,
+  requiere_retencion <span class="t">INTEGER</span> NOT NULL DEFAULT 0
+);
+
+<span class="c">-- Movimientos del turno de caja actual</span>
+<span class="t">CREATE TABLE IF NOT EXISTS</span> Movimientos_Caja (
+  id              <span class="t">INTEGER</span> PRIMARY KEY AUTOINCREMENT,
+  tipo            <span class="t">TEXT</span> NOT NULL,  <span class="c">-- APERTURA/COBRO_MULTA/ENTRADA/SALIDA/CIERRE</span>
+  monto           <span class="t">REAL</span> NOT NULL,
+  descripcion     <span class="t">TEXT</span> NULL,
+  acta_uuid       <span class="t">TEXT</span> NULL,
+  cajero_id       <span class="t">TEXT</span> NOT NULL,
+  timestamp       <span class="t">TEXT</span> NOT NULL
+);</pre>
+
+    <div class="note note-amber">
+      <strong>⚠ Consecuencia conocida por diseño:</strong> Si el agente pierde el dispositivo con borradores en estado PENDIENTE (aún no sincronizados), esas actas se pierden definitivamente. La clave nunca fue a ningún servidor, por lo que nadie puede descifrar el archivo. Esta limitación es conocida y aceptada por el equipo.
+    </div>
+  </div>
+</div>
+
+<!-- ─── 4. Pantallas a construir ─── -->
+<div class="sec" id="s4">
+  <div class="sec-hd"><span class="sec-num">04</span><h2 class="sec-title">Pantallas que Debes Construir</h2></div>
+  <div class="sec-body">
+    <h3>Lista de Forms (pantallas WinForms)</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Nombre del Form</th><th>Modo</th><th>Qué hace</th><th>Cuándo</th></tr></thead>
+        <tbody>
+          <tr><td>LoginForm</td><td>Ambos</td><td>Pantalla de inicio de sesión. Pide email y password. Llama a Yeimi para autenticar y obtener el JWT. Si no hay red, muestra opción de modo offline con credenciales cacheadas. Aquí se deriva la clave SQLCipher.</td><td>Sem 2</td></tr>
+          <tr><td>MenuPrincipalForm</td><td>Ambos</td><td>Menú central con dos opciones: "Modo Handheld (Agente de Calle)" y "Modo Caja". El indicador de conectividad vive aquí — un círculo verde/rojo en la esquina que muestra el estado de la red en tiempo real.</td><td>Sem 2</td></tr>
+          <tr><td>NuevaActaForm</td><td>Handheld</td><td>Formulario de levantamiento de acta. Campos: cédula del conductor (consulta JCE al perder foco si hay red), placa (consulta DGII), tipo de infracción (dropdown del catálogo local), descripción, URL de foto evidencia. Si la infracción requiere retención, habilita el sub-panel de grúa.</td><td>Sem 3–4</td></tr>
+          <tr><td>FirmarActaForm</td><td>Handheld</td><td>Pantalla de confirmación antes de firmar. Muestra el resumen completo del acta. Botón "Firmar y Emitir" que congela el borrador, le pone el timestamp y lo marca como PENDIENTE de sincronización. Una vez firmado, no se puede editar.</td><td>Sem 3–4</td></tr>
+          <tr><td>HistorialActasForm</td><td>Handheld</td><td>Lista de todos los borradores del turno con su estado de sincronización (PENDIENTE, ENVIADO, ERROR). Muestra notificaciones silenciosas para las actas en estado ERROR.</td><td>Sem 4</td></tr>
+          <tr><td>AperturaCajaForm</td><td>Caja</td><td>Inicio del turno de caja. El cajero registra el monto inicial con el que abre. Guarda un movimiento tipo APERTURA en Movimientos_Caja.</td><td>Sem 4</td></tr>
+          <tr><td>CobrarMultaForm</td><td>Caja</td><td>Pantalla principal de cobro. El cajero busca la multa por cédula o número de acta (consulta a Yeimi). Muestra el desglose: multa base + recargos por mora + estadía canódromo = total a pagar. Botón "Confirmar Cobro" que llama a Yeimi para procesar el pago y obtiene el número de transacción.</td><td>Sem 5</td></tr>
+          <tr><td>ReciboForm</td><td>Caja</td><td>Vista del recibo generado tras el cobro exitoso. Muestra todos los conceptos pagados, el número de transacción y la fecha. Tiene un botón "Imprimir" que usa PrintDocument de .NET para enviar a impresora.</td><td>Sem 5</td></tr>
+          <tr><td>CierreCajaForm</td><td>Caja</td><td>Cuadre del turno. Muestra el monto inicial, la suma de todos los cobros, entradas y salidas del día, y el monto final calculado. El cajero confirma el cierre del turno.</td><td>Sem 5–6</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Wireframe conceptual del NuevaActaForm</h3>
+    <div class="screen">
+      <div class="screen-bar">
+        <span class="screen-dot" style="background:#FF5F57"></span>
+        <span class="screen-dot" style="background:#FFBD2E"></span>
+        <span class="screen-dot" style="background:#28C840"></span>
+        <span class="screen-title">NuevaActaForm — Levantamiento de Acta</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-field">
+          <span class="screen-label">Cédula Conductor</span>
+          <span class="screen-value">TextBox → al perder foco, consulta <code>GET /mock/jce/cedula/{cedula}</code> y autocompleta el nombre</span>
+        </div>
+        <div class="screen-field">
+          <span class="screen-label">Nombre Conductor</span>
+          <span class="screen-value">TextBox (autocompletado desde JCE, editable si el conductor no tiene cédula)</span>
+        </div>
+        <div class="screen-field">
+          <span class="screen-label">Placa Vehículo</span>
+          <span class="screen-value">TextBox → al perder foco, consulta <code>GET /mock/dgii/placa/{placa}</code> y muestra marca/modelo/color</span>
+        </div>
+        <div class="screen-field">
+          <span class="screen-label">Tipo de Infracción</span>
+          <span class="screen-value">ComboBox cargado desde <code>Infracciones_Cache</code> en SQLite local (siempre disponible sin red)</span>
+        </div>
+        <div class="screen-field">
+          <span class="screen-label">Monto Base</span>
+          <span class="screen-value">Label calculado automáticamente al seleccionar el tipo de infracción y el tipo de vehículo</span>
+        </div>
+        <div class="screen-field">
+          <span class="screen-label">URL Evidencia</span>
+          <span class="screen-value">TextBox para URL de foto (campo requerido si vehículo no identificado)</span>
+        </div>
+        <div class="screen-field">
+          <span class="screen-label">Panel Grúa / Retención</span>
+          <span class="screen-value">Panel oculto que aparece solo si la infracción seleccionada tiene <code>requiere_retencion = 1</code></span>
+        </div>
+        <div class="screen-field">
+          <span class="screen-label">Estado Red</span>
+          <span class="screen-value">Indicador visual (🟢 En línea / 🔴 Sin conexión) — no bloquea el formulario</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 5. Requisitos funcionales ─── -->
+<div class="sec" id="s5">
+  <div class="sec-hd"><span class="sec-num">05</span><h2 class="sec-title">Lo Que Debes Construir — Lista Completa</h2></div>
+  <div class="sec-body">
+    <div class="tw">
+      <table>
+        <thead><tr><th>ID</th><th>Qué construir</th><th>Cuándo</th><th>Prioridad</th></tr></thead>
+        <tbody>
+          <tr><td>RF-A01</td><td><strong>Módulo de Caja Física.</strong> Apertura de día con monto inicial, registro de entradas/salidas, cobro de multas con desglose (multa + recargo mora + estadía canódromo), visualización/impresión del recibo, y cuadre/cierre de caja con totales del turno.</td><td>Bloque 2–3 (Sem 4–5)</td><td><span class="b b-g">ALTA</span></td></tr>
+          <tr><td>RF-A02</td><td><strong>Modo Handheld.</strong> Formulario completo de levantamiento de acta en la vía pública con consulta de cédula (JCE) y placa (DGII) a Yeimi cuando hay red, y catálogo de infracciones cargado localmente desde SQLite siempre.</td><td>Bloque 2 (Sem 3–4)</td><td><span class="b b-g">ALTA</span></td></tr>
+          <tr><td>RF-A03</td><td><strong>Persistencia offline con SQLite cifrado.</strong> Cada borrador de acta se guarda inmediatamente en SQLite local con SQLCipher AES-256. La clave derivada con PBKDF2 vive solo en memoria RAM. El archivo local es ilegible sin las credenciales correctas del agente y el dispositivo.</td><td>Bloque 1–2 (Sem 2–3)</td><td><span class="b b-g">ALTA</span></td></tr>
+          <tr><td>RF-A04</td><td><strong>Inmutabilidad del borrador firmado.</strong> El borrador es editable y eliminable antes de presionar "Firmar y Emitir". Al firmar: el registro en SQLite se congela (campo <code>timestamp_firma</code> se llena con la hora actual del dispositivo), se genera el UUID definitivo del acta, y el botón de editar desaparece de la UI.</td><td>Bloque 2 (Sem 4)</td><td><span class="b b-g">ALTA</span></td></tr>
+          <tr><td>RF-A05</td><td><strong>Network Listener y sincronización automática.</strong> Un hilo en segundo plano monitorea la conectividad de red. Al detectar que hay internet, busca en SQLite todos los registros con <code>estado_sync = 'PENDIENTE'</code> y los envía en lotes a Yeimi en orden cronológico por <code>timestamp_firma</code>. El agente no hace nada.</td><td>Bloque 3 (Sem 5–6)</td><td><span class="b b-g">ALTA</span></td></tr>
+          <tr><td>RF-A06</td><td><strong>Manejo de rechazos de sincronización.</strong> Si Yeimi rechaza un acta al sincronizar, cambias el <code>estado_sync</code> a 'ERROR' en SQLite y guardas el detalle del error en <code>error_detalle</code>. En el HistorialActasForm muestras una notificación discreta para esa acta. El agente no se bloquea.</td><td>Bloque 3 (Sem 6)</td><td><span class="b b-a">MEDIA</span></td></tr>
+          <tr><td>RF-A07</td><td><strong>Desglose y recibo de cobro.</strong> En el módulo de caja, antes de confirmar el cobro, consultas a Yeimi el detalle actualizado de la multa (multa base + recargos por mora acumulados + estadía en Canódromo si aplica) y lo muestras en pantalla. Al confirmar, generas el recibo imprimible con el número de transacción que devuelve Yeimi.</td><td>Bloque 3 (Sem 5)</td><td><span class="b b-g">ALTA</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 6. Flujo offline ─── -->
+<div class="sec" id="s6">
+  <div class="sec-hd"><span class="sec-num">06</span><h2 class="sec-title">Flujo Offline Completo — Paso a Paso</h2></div>
+  <div class="sec-body">
+    <h3>Los cuatro estados de una acta en tu app</h3>
+    <div class="sync-flow">
+      <div class="sync-step">
+        <div class="sync-indicator si-offline">✏️</div>
+        <div class="sync-content">
+          <div class="sync-state" style="color:var(--slate)">BORRADOR (editable)</div>
+          <div class="sync-desc">El agente está llenando el formulario. Aún no ha presionado "Firmar y Emitir". El registro existe en SQLite con <code>timestamp_firma = NULL</code>. Se puede editar o eliminar libremente. <strong>El agente puede salir de la pantalla y volver — el borrador persiste.</strong></div>
+        </div>
+      </div>
+      <div class="sync-step">
+        <div class="sync-indicator si-offline">🔒</div>
+        <div class="sync-content">
+          <div class="sync-state" style="color:var(--amber)">PENDIENTE (firmado, esperando red)</div>
+          <div class="sync-desc">El agente presionó "Firmar y Emitir". El registro en SQLite recibe el <code>timestamp_firma</code> (hora exacta del dispositivo), el UUID definitivo, y el <code>estado_sync = 'PENDIENTE'</code>. Ya no se puede editar. El Network Listener lo enviará automáticamente cuando detecte internet.</div>
+        </div>
+      </div>
+      <div class="sync-step">
+        <div class="sync-indicator si-sync">✅</div>
+        <div class="sync-content">
+          <div class="sync-state" style="color:var(--teal)">ENVIADO (sincronizado correctamente)</div>
+          <div class="sync-desc">El Network Listener envió el acta a Yeimi y recibió confirmación. El <code>estado_sync</code> cambia a 'ENVIADO'. En el HistorialActasForm aparece con un ícono verde de verificación. El acta ya vive en el Core de Antony y es visible en el portal web de Christopher.</div>
+        </div>
+      </div>
+      <div class="sync-step">
+        <div class="sync-indicator si-error">⚠️</div>
+        <div class="sync-content">
+          <div class="sync-state" style="color:var(--red)">ERROR (rechazado por el servidor)</div>
+          <div class="sync-desc">Yeimi rechazó el acta al sincronizar (error de validación en el Core). El <code>estado_sync</code> cambia a 'ERROR' y el <code>error_detalle</code> guarda el mensaje de error. En el HistorialActasForm aparece con ícono de advertencia. El agente no se bloquea — puede seguir levantando otras actas. El supervisor lo revisa en el Backoffice.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Implementación del Network Listener</h3>
+    <p>El Network Listener es un hilo en segundo plano que corre mientras la app está abierta. Se implementa con <code>Task.Run()</code> o un <code>BackgroundWorker</code> de WinForms:</p>
+    <pre>
+<span class="c">// En el MenuPrincipalForm, al iniciar la app después del login:</span>
+<span class="k">private async void</span> IniciarNetworkListener()
+{
+  <span class="k">await</span> Task.Run(<span class="k">async</span> () => {
+    <span class="k">while</span> (appActiva)
+    {
+      <span class="c">// Verificar conectividad cada 15 segundos</span>
+      <span class="k">await</span> Task.Delay(15_000);
+
+      <span class="k">bool</span> hayRed = NetworkInterface.GetIsNetworkAvailable();
+      <span class="k">if</span> (hayRed)
+      {
+        <span class="k">await</span> SincronizarPendientesAsync();
+        <span class="k">await</span> ActualizarCatalogoInfraccionesAsync();
+      }
+
+      <span class="c">// Actualizar el indicador visual en el Form (hilo UI)</span>
+      Invoke(() => ActualizarIndicadorRed(hayRed));
+    }
+  });
+}
+
+<span class="k">private async Task</span> SincronizarPendientesAsync()
+{
+  <span class="c">// 1. Leer pendientes de SQLite</span>
+  <span class="k">var</span> pendientes = ObtenerActasPendientes(); <span class="c">// WHERE estado_sync = 'PENDIENTE'</span>
+
+  <span class="c">// 2. Enviar cada una a Yeimi en orden cronológico</span>
+  <span class="k">foreach</span> (<span class="k">var</span> acta <span class="k">in</span> pendientes.OrderBy(a => a.TimestampFirma))
+  {
+    <span class="k">try</span> {
+      <span class="k">var</span> json = JsonSerializer.Serialize(acta.ToApiDto());
+      <span class="k">var</span> respuesta = <span class="k">await</span> httpClient.PostAsync(
+        <span class="s">"/api/v1/actas"</span>,
+        <span class="k">new</span> StringContent(json, Encoding.UTF8, <span class="s">"application/json"</span>)
+      );
+
+      <span class="k">if</span> (respuesta.IsSuccessStatusCode || respuesta.StatusCode == HttpStatusCode.Accepted)
+        ActualizarEstadoSync(acta.Id, <span class="s">"ENVIADO"</span>);
+      <span class="k">else</span>
+        ActualizarEstadoSync(acta.Id, <span class="s">"ERROR"</span>, <span class="k">await</span> respuesta.Content.ReadAsStringAsync());
+    }
+    <span class="k">catch</span> (Exception ex) {
+      ActualizarEstadoSync(acta.Id, <span class="s">"ERROR"</span>, ex.Message);
+    }
+  }
+}</pre>
+
+    <h3>El JSON que envías a Yeimi al sincronizar</h3>
+    <p>Este es el formato exacto del body del <code>POST /api/v1/actas</code> que envías. Coordínalo con Yeimi para que coincida con el <code>openapi.yaml</code>:</p>
+    <pre>
+{
+  <span class="s">"id"</span>:                     <span class="s">"f4a3b2c1-uuid-generado-en-dispositivo"</span>,
+  <span class="s">"conductor_cedula"</span>:        <span class="s">"001-1234567-8"</span>,        <span class="c">// nullable</span>
+  <span class="s">"tipo_infraccion_codigo"</span>:  <span class="s">"L63-005"</span>,
+  <span class="s">"placa"</span>:                   <span class="s">"A123456"</span>,               <span class="c">// nullable</span>
+  <span class="s">"fecha_hecho"</span>:             <span class="s">"2025-09-15T14:23:00Z"</span>,   <span class="c">// timestamp del dispositivo</span>
+  <span class="s">"url_evidencia"</span>:           <span class="s">"https://..."</span>,           <span class="c">// nullable</span>
+  <span class="s">"descripcion_vehiculo"</span>:    <span class="s">"Toyota Corolla plateado"</span>, <span class="c">// nullable</span>
+  <span class="s">"grua_numero"</span>:             <span class="s">"GRU-045"</span>,               <span class="c">// nullable, si retención</span>
+  <span class="s">"tipo_vehiculo"</span>:           <span class="s">"PARTICULAR"</span>             <span class="c">// para calcular monto</span>
+}</pre>
+
+    <div class="note note-teal">
+      <strong>Manejo del HTTP 202 Accepted de Yeimi:</strong> Cuando el Core de Antony está caído, Yeimi responde con HTTP 202 en lugar de 200. En tu código, trata el 202 igual que el 200 — marca el acta como ENVIADO. La multa quedó en la cola de Yeimi y llegará al Core eventualmente. No necesitas preocuparte por eso.
+    </div>
+  </div>
+</div>
+
+<!-- ─── 7. Módulo de caja ─── -->
+<div class="sec" id="s7">
+  <div class="sec-hd"><span class="sec-num">07</span><h2 class="sec-title">Módulo de Caja — Flujo Completo</h2></div>
+  <div class="sec-body">
+    <h3>Apertura del turno</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">El cajero abre el AperturaCajaForm</div>
+          <div class="step-desc">Ingresa el monto inicial de efectivo con el que abre la caja. Haces un INSERT en <code>Movimientos_Caja</code> con <code>tipo = 'APERTURA'</code> y el monto ingresado.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">El sistema registra el inicio del turno</div>
+          <div class="step-desc">Guardas localmente el timestamp de apertura y el ID del cajero. La caja queda "abierta" — el sistema no permite abrir otra hasta que esta sea cerrada.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Cobro de una multa</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">El ciudadano presenta su cédula o número de acta</div>
+          <div class="step-desc">El cajero lo ingresa en el CobrarMultaForm y hace clic en "Buscar". Tú llamas a <code>GET /api/v1/conductores/{cedula}/multas</code> o <code>GET /api/v1/actas/{uuid}</code> vía Yeimi.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Mostrar el desglose completo en pantalla</div>
+          <div class="step-desc">La respuesta del Core incluye todos los montos. Muestras claramente:<br>
+          Multa Base: RD$3,500.00<br>
+          Recargos por Mora: RD$350.00<br>
+          Estadía Canódromo (15 días × RD$200): RD$3,000.00<br>
+          <strong>Total a Pagar: RD$6,850.00</strong></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">El cajero confirma y presiona "Confirmar Cobro"</div>
+          <div class="step-desc">Llamas a <code>POST /pagos/procesar</code> en Yeimi con el UUID del acta, el canal (<code>"CAJA"</code>), y el desglose de montos. Yeimi procesa el pago simulado y devuelve el número de transacción.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Mostrar y guardar el recibo</div>
+          <div class="step-desc">Abres el ReciboForm con todos los datos del pago. Haces un INSERT en <code>Movimientos_Caja</code> con <code>tipo = 'COBRO_MULTA'</code> y el monto total cobrado. El cajero puede imprimir el recibo.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Cierre del turno</h3>
+    <p>Al final del día el cajero abre el CierreCajaForm que muestra el resumen calculado desde <code>Movimientos_Caja</code>:</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Concepto</th><th>Cómo se calcula</th></tr></thead>
+        <tbody>
+          <tr><td>Monto de Apertura</td><td>El monto del movimiento tipo APERTURA del turno activo</td></tr>
+          <tr><td>Total Cobrado (Multas)</td><td>SUM de todos los movimientos tipo COBRO_MULTA del turno</td></tr>
+          <tr><td>Entradas Adicionales</td><td>SUM de movimientos tipo ENTRADA del turno</td></tr>
+          <tr><td>Salidas del Día</td><td>SUM de movimientos tipo SALIDA del turno</td></tr>
+          <tr><td><strong>Monto Final Esperado</strong></td><td>Apertura + Cobros + Entradas − Salidas</td></tr>
+          <tr><td>Monto Real (ingresado por cajero)</td><td>El cajero ingresa el conteo físico del efectivo en caja</td></tr>
+          <tr><td>Diferencia</td><td>Monto Final Esperado − Monto Real (si es positivo: faltante; negativo: sobrante)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 8. Actualización del catálogo offline ─── -->
+<div class="sec" id="s8">
+  <div class="sec-hd"><span class="sec-num">08</span><h2 class="sec-title">Actualización del Catálogo de Infracciones</h2></div>
+  <div class="sec-body">
+    <h3>¿Por qué necesitas el catálogo en SQLite?</h3>
+    <p>Cuando el agente está en la calle sin internet, necesita poder seleccionar el tipo de infracción del formulario. Si el catálogo solo viviera en el servidor, la app no funcionaría offline. Por eso guardas una copia local en <code>Infracciones_Cache</code>.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Al iniciar sesión con red disponible</div>
+          <div class="step-desc">Llamas a <code>GET /api/v1/infracciones</code> vía Yeimi para obtener el catálogo actualizado. Borras la tabla <code>Infracciones_Cache</code> y la vuelves a llenar con los datos frescos. Esto asegura que siempre tengas los montos correctos.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Cuando el Network Listener detecta reconexión</div>
+          <div class="step-desc">Además de sincronizar las actas pendientes, también llamas al endpoint del catálogo para actualizarlo. Esto asegura que si Antony agregó nuevas infracciones mientras el agente estaba offline, las tenga disponibles al reconectarse.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Si nunca hay internet al iniciar</div>
+          <div class="step-desc">Usas los datos que ya existen en <code>Infracciones_Cache</code> de la última sincronización exitosa. Si la tabla está vacía (primer uso sin red), muestras un mensaje informativo y deshabilitas el formulario de nueva acta hasta obtener el catálogo.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note note-green">
+      <strong>✅ Coordinación con Antony:</strong> Antony debe tener el endpoint <code>GET /api/v1/infracciones</code> disponible desde la Semana 3. Asegúrate de que el formato de respuesta incluya todos los campos que necesitas para tu tabla <code>Infracciones_Cache</code>: código, descripción, categoría, montos por tipo de vehículo y el flag de retención.
+    </div>
+  </div>
+</div>
+
+<!-- ─── 9. Cronograma ─── -->
+<div class="sec" id="s9">
+  <div class="sec-hd"><span class="sec-num">09</span><h2 class="sec-title">Tu Cronograma Semana a Semana</h2></div>
+  <div class="sec-body">
+    <div class="note note-red">
+      <strong>🔴 Tu prioridad absoluta en la Semana 2:</strong> Debes tener SQLite + SQLCipher funcionando en una prueba de concepto (PoC) aislada — abrir una BD cifrada, insertar un registro, cerrarlo, abrirlo de nuevo con la misma clave. Si esto no funciona, todo lo demás se bloquea. Resuélvelo primero antes de diseñar cualquier Form.
+    </div>
+
+    <div class="wk-grid">
+      <div class="wk">
+        <div class="wk-hd"><span class="wk-label">SEMANA 1</span><span class="wk-tag">Bloque 1 — Fundación</span></div>
+        <div class="wk-body">
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Crear el proyecto WinForms</strong> en la carpeta <code>/caja</code> del monorepo.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Instalar los paquetes NuGet</strong> de SQLite y SQLCipher.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt">Diseñar el <strong>esquema de las 3 tablas</strong> SQLite en papel/doc antes de codificarlas.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt">Revisar el <code>openapi.yaml</code> de Yeimi (cuando esté disponible) para conocer los endpoints que consumirás.</div></div>
+        </div>
+      </div>
+      <div class="wk">
+        <div class="wk-hd"><span class="wk-label">SEMANA 2</span><span class="wk-tag">Bloque 1 — PoC Crítica 🔴</span></div>
+        <div class="wk-body">
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Prueba de concepto SQLCipher:</strong> crear BD cifrada, insertar, leer, cerrar y reabrir con la misma clave derivada por PBKDF2. Confirmar que funciona.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Implementar el LoginForm</strong> con la derivación de clave y apertura de la BD SQLite.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Crear el método <code>InicializarBD()</code></strong> que crea las 3 tablas si no existen al primer arranque.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt">Confirmar con Yeimi que sus mocks están disponibles para consumirlos desde la Semana 3.</div></div>
+        </div>
+      </div>
+      <div class="wk">
+        <div class="wk-hd"><span class="wk-label">SEMANA 3</span><span class="wk-tag">Bloque 2 — Núcleo</span></div>
+        <div class="wk-body">
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Implementar el MenuPrincipalForm</strong> con el indicador de red en tiempo real y navegación a los dos modos.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Implementar el NuevaActaForm</strong> con el formulario completo, consulta de JCE y DGII a los mocks de Yeimi, y guardado en SQLite.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Cargar el catálogo de infracciones</strong> desde Yeimi al hacer login y guardarlo en <code>Infracciones_Cache</code>.</div></div>
+        </div>
+      </div>
+      <div class="wk">
+        <div class="wk-hd"><span class="wk-label">SEMANA 4</span><span class="wk-tag">Bloque 2 — Núcleo</span></div>
+        <div class="wk-body">
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Implementar el FirmarActaForm</strong> con la lógica de congelamiento del borrador (timestamp_firma + inmutabilidad).</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Implementar el HistorialActasForm</strong> con los estados de sincronización por colores.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Implementar el AperturaCajaForm</strong> con el registro del monto inicial en Movimientos_Caja.</div></div>
+        </div>
+      </div>
+      <div class="wk">
+        <div class="wk-hd"><span class="wk-label">SEMANA 5</span><span class="wk-tag">Bloque 3 — Integración</span></div>
+        <div class="wk-body">
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Implementar el Network Listener</strong> con sincronización automática en segundo plano (Task.Run).</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Implementar el CobrarMultaForm</strong> con consulta del desglose completo a Yeimi y confirmación de pago.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Implementar el ReciboForm</strong> con los datos del pago y el botón de impresión.</div></div>
+        </div>
+      </div>
+      <div class="wk">
+        <div class="wk-hd"><span class="wk-label">SEMANA 6</span><span class="wk-tag">Bloque 3 — Integración</span></div>
+        <div class="wk-body">
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Implementar el CierreCajaForm</strong> con el cálculo del cuadre del turno desde Movimientos_Caja.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Prueba del flujo offline completo:</strong> desconectar la red, levantar 3 actas, reconectar, verificar que llegan a Yeimi automáticamente.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt">Verificar el manejo de actas en estado ERROR con Antony para revisar los rechazos en el Backoffice.</div></div>
+        </div>
+      </div>
+      <div class="wk">
+        <div class="wk-hd"><span class="wk-label">SEMANA 7</span><span class="wk-tag">Bloque 4 — Cierre</span></div>
+        <div class="wk-body">
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Pruebas cruzadas:</strong> Christopher prueba tu módulo intentando forzar errores. Documenta los resultados.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt">Ejecutar los casos de prueba CP-01 y CP-02 y documentar resultados.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt">Corregir bugs encontrados en las pruebas cruzadas.</div></div>
+        </div>
+      </div>
+      <div class="wk">
+        <div class="wk-hd"><span class="wk-label">SEMANA 8</span><span class="wk-tag">Bloque 4 — Entrega</span></div>
+        <div class="wk-body">
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt"><strong>Escribir el INSTALL.md</strong> de la app WinForms: cómo instalar .NET 8, cómo instalar los paquetes NuGet, cómo configurar la URL del middleware, y cómo levantar la app.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt">Preparar la <strong>demo del flujo offline</strong> para la presentación final.</div></div>
+          <div class="wk-task"><div class="wk-bullet"></div><div class="wk-task-txt">Verificar que todo funciona en el entorno unificado de localhost del equipo.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 10. Dependencias ─── -->
+<div class="sec" id="s10">
+  <div class="sec-hd"><span class="sec-num">10</span><h2 class="sec-title">Tus Dependencias con el Equipo</h2></div>
+  <div class="sec-body">
+    <div class="dep-grid">
+      <div class="dep-card">
+        <div class="dep-dir">⬅ Lo que necesitas de</div>
+        <div class="dep-person">Yeimi (Middleware)</div>
+        <div class="dep-items">
+          <div class="dep-item">Mocks de JCE y DGII funcionando desde el inicio de la Semana 3 para las consultas del NuevaActaForm</div>
+          <div class="dep-item">Endpoint <code>GET /api/v1/infracciones</code> disponible para cargar el catálogo en SQLite local</div>
+          <div class="dep-item">Endpoint <code>POST /pagos/procesar</code> disponible en la Semana 5 para el cobro en caja</div>
+          <div class="dep-item">Claridad sobre qué responde cuando el Core está caído (HTTP 202) para no confundirlo con un error</div>
+          <div class="dep-item">URL de Swagger UI para explorar los endpoints disponibles</div>
+        </div>
+      </div>
+      <div class="dep-card">
+        <div class="dep-dir">➡ Lo que debes entregarle a</div>
+        <div class="dep-person">Yeimi (Middleware)</div>
+        <div class="dep-items">
+          <div class="dep-item">El formato exacto del JSON que envías al crear una acta (para que lo documente en el openapi.yaml)</div>
+          <div class="dep-item">Confirmación de que incluyes el UUID generado en el dispositivo como campo <code>id</code></div>
+          <div class="dep-item">Confirmación de que envías el JWT en el header <code>Authorization: Bearer token</code></div>
+        </div>
+      </div>
+      <div class="dep-card">
+        <div class="dep-dir">⬅ Lo que necesitas de</div>
+        <div class="dep-person">Antony (Core)</div>
+        <div class="dep-items">
+          <div class="dep-item">Endpoint <code>GET /api/v1/infracciones</code> con el catálogo de tipos de infracción desde la Semana 3</div>
+          <div class="dep-item">Claridad sobre qué campos son obligatorios y cuáles son opcionales en el body de creación de acta</div>
+          <div class="dep-item">Los datos de usuario del agente de prueba (email y password) para hacer login en la app</div>
+        </div>
+      </div>
+      <div class="dep-card">
+        <div class="dep-dir">➡ Lo que debes entregarle a</div>
+        <div class="dep-person">Antony (Core)</div>
+        <div class="dep-items">
+          <div class="dep-item">Las actas de prueba generadas offline para verificar que el Core las recibe y procesa correctamente</div>
+          <div class="dep-item">Reporte de cualquier campo faltante o con formato incorrecto al sincronizar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 11. Entregables ─── -->
+<div class="sec" id="s11">
+  <div class="sec-hd"><span class="sec-num">11</span><h2 class="sec-title">Tus Entregables Finales para la Presentación</h2></div>
+  <div class="sec-body">
+    <div class="tw">
+      <table>
+        <thead><tr><th>Entregable</th><th>Descripción</th><th>Estado esperado</th></tr></thead>
+        <tbody>
+          <tr><td>Código fuente en GitHub</td><td>Carpeta <code>/caja</code> en el monorepo con todo el código del proyecto WinForms. Sin URLs hardcodeadas ni credenciales en el código.</td><td><span class="b b-g">Obligatorio</span></td></tr>
+          <tr><td>INSTALL.md de la App</td><td>Instrucciones para instalar .NET 8, restaurar paquetes NuGet, configurar la URL del middleware en appsettings.json, y ejecutar la app.</td><td><span class="b b-g">Obligatorio</span></td></tr>
+          <tr><td>Demo del flujo offline</td><td>Durante la presentación: desconectar la red → levantar 2 actas y firmarlas → reconectar → mostrar cómo aparecen como ENVIADO en el historial y como EMITIDAS en el portal web de Christopher.</td><td><span class="b b-g">Obligatorio</span></td></tr>
+          <tr><td>Demo del módulo de caja</td><td>Mostrar el flujo completo: apertura de caja → cobro de una multa con desglose → recibo generado → cierre de caja con cuadre.</td><td><span class="b b-a">Alta Prioridad</span></td></tr>
+          <tr><td>Evidencia del cifrado</td><td>Mostrar que el archivo <code>actas_local.db</code> en <code>%AppData%\Digesett\</code> no se puede abrir con un visor de SQLite normal sin la clave — los datos son ilegibles.</td><td><span class="b b-a">Alta Prioridad</span></td></tr>
+          <tr><td>Casos de prueba documentados</td><td>Resultados documentados de CP-01 y CP-02 en el repositorio.</td><td><span class="b b-a">Alta Prioridad</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Casos de prueba que son tu responsabilidad</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>ID</th><th>Escenario</th><th>Resultado esperado que debes verificar</th></tr></thead>
+        <tbody>
+          <tr><td>CP-01</td><td>Levantas 3 multas offline, pierdes señal, recuperas conexión después de 10 minutos</td><td>Las 3 multas se sincronizan automáticamente en orden cronológico. Las 3 aparecen en estado EMITIDA en el portal web de Christopher sin intervención manual.</td></tr>
+          <tr><td>CP-02</td><td>Dos agentes multan la misma placa simultáneamente estando offline</td><td>Ambas multas son aceptadas por el sistema con sus respectivos UUIDs. El ciudadano tiene dos actas EMITIDAS válidas. No hay rechazo por "placa duplicada".</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer style="text-align:center;padding:2.5rem 0 1rem;color:var(--slate);font-size:.75rem;border-top:1px solid var(--border);margin-top:1rem">
+  <p><strong style="color:var(--ink)">DOC-SDP-DIGESETT-IND-ANGEL-V1.0</strong></p>
+  <p style="margin-top:.35rem">SDP Individual — Ángel · App de Caja y Fiscalización · Sistema Digital DIGESETT</p>
+  <p style="margin-top:.35rem">Proyecto Académico de Ingeniería de Software · Datos simulados, uso exclusivamente académico.</p>
+</footer>
+
+</main>
+</body>
+</html>
