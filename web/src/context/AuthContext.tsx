@@ -1,6 +1,5 @@
 import { createContext, useState, useContext } from 'react';
 
-// ── Tipos ────────────────────────────────────────────
 interface AuthState {
   token:     string | null;
   usuarioId: string | null;
@@ -13,14 +12,12 @@ interface AuthContextType {
   logout: () => void;
 }
 
-// ── Contexto ─────────────────────────────────────────
 const AuthContext = createContext<AuthContextType>({
   auth:   { token: null, usuarioId: null, rol: null },
   login:  () => {},
   logout: () => {},
 });
 
-// ── Provider ─────────────────────────────────────────
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [auth, setAuth] = useState<AuthState>({
     token:     null,
@@ -29,10 +26,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   const login = (token: string, usuarioId: string, rol: string) => {
+    // Guardar en sessionStorage para que axiosClient lo pueda leer
+    sessionStorage.setItem('token', token);
     setAuth({ token, usuarioId, rol });
   };
 
   const logout = () => {
+    // Limpiar sessionStorage al cerrar sesión
+    sessionStorage.removeItem('token');
     setAuth({ token: null, usuarioId: null, rol: null });
   };
 
@@ -43,7 +44,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ── Hook personalizado ────────────────────────────────
 export function useAuth() {
   return useContext(AuthContext);
 }
