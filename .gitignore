@@ -1,0 +1,19 @@
+# Archivos de compilación de .NET (se generan solos, no se suben)
+bin/
+obj/
+
+# Configuración de Visual Studio (propia de cada computadora)
+.vs/
+
+# Configuración de Visual Studio Code (si alguien la usa)
+.vscode/
+
+# Archivos con datos sensibles (contraseñas, cadenas de conexión)
+appsettings.Development.json
+appsettings.*.json
+!appsettings.json
+
+# Dependencias de Node.js (para el portal web de Christopher)
+node_modules/
+dist/
+build/
