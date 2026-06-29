@@ -2,4 +2,76 @@ openapi: "3.0.3"
 info:
   title: DIGESETT API
   version: "1.0.0"
-  description: "Contrato de integración del Sistema Digital DIGESETT — pendiente de definición final (Semana 2)"
+  description: "Contrato de integración del Sistema Digital DIGESETT"
+
+servers:
+  - url: http://localhost:6001
+    description: Middleware (Yeimi)
+  - url: http://localhost:5001
+    description: Core (Antony)
+
+paths:
+  /api/mock/jce/cedula/{id}:
+    get:
+      summary: Consulta simulada a la JCE por cédula
+      tags:
+        - Mocks Gubernamentales
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Número de cédula a consultar
+          schema:
+            type: string
+            example: "001-0000001-0"
+      responses:
+        "200":
+          description: Datos del conductor encontrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cedula:
+                    type: string
+                  nombre_completo:
+                    type: string
+                  estado:
+                    type: string
+                    enum: [ACTIVO, SUSPENDIDO]
+        "503":
+          description: Error simulado de disponibilidad del servicio gubernamental
+
+  /api/mock/dgii/placa/{placa}:
+    get:
+      summary: Consulta simulada a la DGII por placa de vehículo
+      tags:
+        - Mocks Gubernamentales
+      parameters:
+        - name: placa
+          in: path
+          required: true
+          description: Placa del vehículo a consultar
+          schema:
+            type: string
+            example: "A123456"
+      responses:
+        "200":
+          description: Datos del vehículo encontrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  placa:
+                    type: string
+                  marca:
+                    type: string
+                  modelo:
+                    type: string
+                  propietario_cedula:
+                    type: string
+                  marbete_vigente:
+                    type: boolean
+        "503":
+          description: Error simulado de disponibilidad del servicio gubernamental
