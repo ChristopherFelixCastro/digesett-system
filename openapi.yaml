@@ -75,3 +75,69 @@ paths:
                     type: boolean
         "503":
           description: Error simulado de disponibilidad del servicio gubernamental
+
+/api/mock/pgr/antecedentes/{cedula}:
+    get:
+      summary: Consulta simulada a la PGR de antecedentes penales
+      tags:
+        - Mocks Gubernamentales
+      parameters:
+        - name: cedula
+          in: path
+          required: true
+          description: Número de cédula a consultar
+          schema:
+            type: string
+            example: "001-0000001-0"
+      responses:
+        "200":
+          description: Resultado de antecedentes penales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cedula:
+                    type: string
+                  nombre_completo:
+                    type: string
+                  tiene_antecedentes:
+                    type: boolean
+                  detalle:
+                    type: string
+        "503":
+          description: Error simulado de disponibilidad del servicio gubernamental
+
+  /api/mock/intrant/licencia/{cedula}:
+    get:
+      summary: Consulta simulada al INTRANT del estado de licencia
+      tags:
+        - Mocks Gubernamentales
+      parameters:
+        - name: cedula
+          in: path
+          required: true
+          description: Número de cédula a consultar
+          schema:
+            type: string
+            example: "001-0000001-0"
+      responses:
+        "200":
+          description: Estado de la licencia de conducir
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cedula:
+                    type: string
+                  numero_licencia:
+                    type: string
+                  categoria:
+                    type: string
+                  vigente:
+                    type: boolean
+                  licencia_bloqueada:
+                    type: boolean
+        "503":
+          description: Error simulado de disponibilidad del servicio gubernamental

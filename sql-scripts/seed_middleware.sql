@@ -34,3 +34,18 @@ INSERT INTO MockVehiculos (placa, chasis, marca, modelo, anio, color, tipo_vehic
 
 SELECT * FROM MockConductores;
 SELECT * FROM MockVehiculos;
+
+
+INSERT INTO MockLicencias 
+(cedula, numero_licencia, categoria, vigente, renovacion_bloqueada) 
+VALUES
+('001-0000001-0', 'LIC-001-2019', 'B',  1, 0),
+('001-0000002-1', 'LIC-002-2018', 'A',  0, 1),
+('001-0000003-2', 'LIC-003-2020', 'B',  1, 0),
+('001-0000004-3', 'LIC-004-2017', 'C',  0, 0),
+('001-0000005-4', 'LIC-005-2021', 'B',  1, 0),
+('001-0000006-5', 'LIC-006-2019', 'A',  1, 1),
+('001-0000007-6', 'LIC-007-2022', 'B',  1, 0),
+('001-0000008-7', 'LIC-008-2016', 'C',  0, 1),
+('001-0000009-8', 'LIC-009-2020', 'B',  1, 0),
+('001-0000010-9', 'LIC-010-2018', 'A',  0, 0);

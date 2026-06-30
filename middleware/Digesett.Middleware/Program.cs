@@ -167,4 +167,83 @@ app.Map("/api/v1/{**ruta}", async (
     }
 });
 
+// ===========================================
+// MOCK PGR - Consulta de antecedentes penales por cédula
+// ===========================================
+app.MapGet("/api/mock/pgr/antecedentes/{cedula}", async (string cedula) =>
+{
+    if (random.Next(1, 101) <= 5)
+        return Results.Json(
+            new { mensaje = "Servicio no disponible temporalmente", retry_after_seconds = 30 },
+            statusCode: 503);
+
+    using var connection = new SqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    // Buscamos el conductor en MockConductores
+    var command = new SqlCommand(
+        "SELECT cedula, nombre_completo, estado FROM MockConductores WHERE cedula = @cedula",
+        connection);
+    command.Parameters.AddWithValue("@cedula", cedula);
+
+    using var reader = await command.ExecuteReaderAsync();
+
+    if (await reader.ReadAsync())
+    {
+        var estadoConductor = reader.GetString(2);
+
+        // Si el conductor está SUSPENDIDO, simulamos que tiene antecedentes
+        var tieneAntecedentes = estadoConductor == "SUSPENDIDO";
+
+        return Results.Ok(new
+        {
+            cedula = reader.GetString(0),
+            nombre_completo = reader.GetString(1),
+            tiene_antecedentes = tieneAntecedentes,
+            detalle = tieneAntecedentes
+                ? "Registro encontrado en el sistema de antecedentes penales"
+                : "Sin antecedentes penales registrados"
+        });
+    }
+
+    return Results.NotFound(new { mensaje = "Cédula no encontrada en el sistema mock de la PGR" });
+});
+
+// ===========================================
+// MOCK INTRANT - Consulta de licencia de conducir por cédula
+// ===========================================
+app.MapGet("/api/mock/intrant/licencia/{cedula}", async (string cedula) =>
+{
+    if (random.Next(1, 101) <= 5)
+        return Results.Json(
+            new { mensaje = "Servicio no disponible temporalmente", retry_after_seconds = 30 },
+            statusCode: 503);
+
+    using var connection = new SqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    var command = new SqlCommand(
+        @"SELECT cedula, numero_licencia, categoria, vigente, renovacion_bloqueada 
+          FROM MockLicencias 
+          WHERE cedula = @cedula",
+        connection);
+    command.Parameters.AddWithValue("@cedula", cedula);
+
+    using var reader = await command.ExecuteReaderAsync();
+
+    if (await reader.ReadAsync())
+    {
+        return Results.Ok(new
+        {
+            cedula = reader.GetString(0),
+            numero_licencia = reader.GetString(1),
+            categoria = reader.GetString(2),
+            vigente = reader.GetBoolean(3),
+            licencia_bloqueada = reader.GetBoolean(4)
+        });
+    }
+
+    return Results.NotFound(new { mensaje = "Cédula no encontrada en el sistema mock del INTRANT" });
+});
+
 app.Run();
