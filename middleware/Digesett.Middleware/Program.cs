@@ -15,7 +15,8 @@ builder.Services.AddHttpClient("CoreApi", client =>
     client.Timeout = TimeSpan.FromSeconds(10);
 });
 
-var jwtSecret = builder.Configuration["Jwt:SecretKey"]!;
+var jwtSecret = builder.Configuration["Jwt:SecretKey"]
+    ?? "clave-temporal-desarrollo-digesett-middleware-2024";
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

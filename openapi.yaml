@@ -11,6 +11,11 @@ servers:
     description: Core (Antony)
 
 paths:
+
+  # ─────────────────────────────────────────
+  # MOCKS GUBERNAMENTALES
+  # ─────────────────────────────────────────
+
   /api/mock/jce/cedula/{id}:
     get:
       summary: Consulta simulada a la JCE por cédula
@@ -34,13 +39,37 @@ paths:
                 properties:
                   cedula:
                     type: string
+                    example: "001-0000001-0"
                   nombre_completo:
                     type: string
+                    example: "Juan Alberto Pérez Méndez"
                   estado:
                     type: string
                     enum: [ACTIVO, SUSPENDIDO]
+                    example: "ACTIVO"
+        "404":
+          description: Cédula no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Cédula no encontrada en el sistema mock de la JCE"
         "503":
           description: Error simulado de disponibilidad del servicio gubernamental
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Servicio no disponible temporalmente"
+                  retry_after_seconds:
+                    type: integer
+                    example: 30
 
   /api/mock/dgii/placa/{placa}:
     get:
@@ -65,18 +94,44 @@ paths:
                 properties:
                   placa:
                     type: string
+                    example: "A123456"
                   marca:
                     type: string
+                    example: "Toyota"
                   modelo:
                     type: string
+                    example: "Corolla"
                   propietario_cedula:
                     type: string
+                    example: "001-0000001-0"
                   marbete_vigente:
                     type: boolean
+                    example: true
+        "404":
+          description: Placa no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Placa no encontrada en el sistema mock de la DGII"
         "503":
           description: Error simulado de disponibilidad del servicio gubernamental
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Servicio no disponible temporalmente"
+                  retry_after_seconds:
+                    type: integer
+                    example: 30
 
-/api/mock/pgr/antecedentes/{cedula}:
+  /api/mock/pgr/antecedentes/{cedula}:
     get:
       summary: Consulta simulada a la PGR de antecedentes penales
       tags:
@@ -91,7 +146,7 @@ paths:
             example: "001-0000001-0"
       responses:
         "200":
-          description: Resultado de antecedentes penales
+          description: Resultado de consulta de antecedentes penales
           content:
             application/json:
               schema:
@@ -99,18 +154,43 @@ paths:
                 properties:
                   cedula:
                     type: string
+                    example: "001-0000001-0"
                   nombre_completo:
                     type: string
+                    example: "Juan Alberto Pérez Méndez"
                   tiene_antecedentes:
                     type: boolean
+                    example: false
                   detalle:
                     type: string
+                    example: "Sin antecedentes penales registrados"
+        "404":
+          description: Cédula no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Cédula no encontrada en el sistema mock de la PGR"
         "503":
           description: Error simulado de disponibilidad del servicio gubernamental
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Servicio no disponible temporalmente"
+                  retry_after_seconds:
+                    type: integer
+                    example: 30
 
   /api/mock/intrant/licencia/{cedula}:
     get:
-      summary: Consulta simulada al INTRANT del estado de licencia
+      summary: Consulta simulada al INTRANT del estado de licencia de conducir
       tags:
         - Mocks Gubernamentales
       parameters:
@@ -131,13 +211,123 @@ paths:
                 properties:
                   cedula:
                     type: string
+                    example: "001-0000001-0"
                   numero_licencia:
                     type: string
+                    example: "LIC-001-2019"
                   categoria:
                     type: string
+                    example: "B"
                   vigente:
                     type: boolean
+                    example: true
                   licencia_bloqueada:
                     type: boolean
+                    example: false
+        "404":
+          description: Cédula no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Cédula no encontrada en el sistema mock del INTRANT"
         "503":
           description: Error simulado de disponibilidad del servicio gubernamental
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Servicio no disponible temporalmente"
+                  retry_after_seconds:
+                    type: integer
+                    example: 30
+
+  # ─────────────────────────────────────────
+  # PROXY INVERSO AL CORE
+  # ─────────────────────────────────────────
+
+  /api/v1/{ruta}:
+    get:
+      summary: Proxy inverso hacia el Core de Antony (GET)
+      tags:
+        - Proxy Core
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: ruta
+          in: path
+          required: true
+          description: Ruta del endpoint del Core a consultar
+          schema:
+            type: string
+            example: "conductores"
+      responses:
+        "200":
+          description: Respuesta del Core reenviada al cliente
+        "401":
+          description: Token JWT requerido o inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Token JWT requerido o inválido"
+        "503":
+          description: El Core no está disponible
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "El Core no está disponible en este momento"
+    post:
+      summary: Proxy inverso hacia el Core de Antony (POST)
+      tags:
+        - Proxy Core
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: ruta
+          in: path
+          required: true
+          description: Ruta del endpoint del Core a invocar
+          schema:
+            type: string
+            example: "actas"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Payload que se reenvía al Core (estructura definida por Antony)
+      responses:
+        "200":
+          description: Respuesta del Core reenviada al cliente
+        "202":
+          description: Petición encolada en OfflineQueue porque el Core no está disponible
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Core no disponible. Petición encolada para procesamiento posterior"
+                  queue_id:
+                    type: string
+                    example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        "401":
+          description: Token JWT requerido o inválido
+        "503":
+          description: El Core no está disponible
