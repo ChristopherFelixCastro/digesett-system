@@ -15,4 +15,11 @@
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.8" />
   </ItemGroup>
 
+  <Target Name="CopySqlCipherRuntimes" AfterTargets="Build">
+    <ItemGroup>
+      <SqlCipherRuntimes Include="$(ProjectDir)bin\$(Configuration)\runtimes\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SqlCipherRuntimes)" DestinationFolder="$(TargetDir)runtimes\%(RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
+
 </Project>

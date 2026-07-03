@@ -162,6 +162,40 @@ namespace CajaAmet
                 string connString = ObtenerConnectionString(claveHex);
                 string dbPath = ObtenerDbPath();
                 sb.AppendLine($"2. Ruta de la BD: {dbPath}");
+
+                // Verificar compatibilidad de clave si el archivo ya existe
+                if (File.Exists(dbPath))
+                {
+                    sb.AppendLine("   Verificando compatibilidad de la base de datos existente...");
+                    try
+                    {
+                        using (var connection = new SqliteConnection(connString))
+                        {
+                            connection.Open();
+                            using (var cmd = connection.CreateCommand())
+                            {
+                                cmd.CommandText = "SELECT name FROM sqlite_master LIMIT 1;";
+                                cmd.ExecuteScalar();
+                            }
+                        }
+                        sb.AppendLine("   Base de datos existente es compatible.");
+                    }
+                    catch (SqliteException ex) when (ex.SqliteErrorCode == 26)
+                    {
+                        sb.AppendLine("   [INFO]: La base de datos existe pero usa otra clave o no está cifrada.");
+                        sb.AppendLine("           Eliminando base de datos incompatible para iniciar de nuevo...");
+                        try
+                        {
+                            File.Delete(dbPath);
+                        }
+                        catch (Exception delEx)
+                        {
+                            sb.AppendLine($"   [ERROR] No se pudo eliminar la base de datos incompatible: {delEx.Message}");
+                            throw;
+                        }
+                    }
+                }
+
                 sb.AppendLine("3. Abriendo base de datos e inicializando tablas...");
                 InicializarBD(connString);
                 sb.AppendLine("   Tablas creadas/verificadas con éxito.");

@@ -17,11 +17,8 @@ namespace CajaAmet
         {
             cmbTestUsers.Items.Clear();
             cmbTestUsers.Items.Add("— Ingresar credenciales manualmente —");
-            cmbTestUsers.Items.Add("Cajero 1: Juan Pérez (cajero1@digesett.gov.do)");
-            cmbTestUsers.Items.Add("Cajero 2: María Rodríguez (cajero2@digesett.gov.do)");
-            cmbTestUsers.Items.Add("Agente 1: Sgt. Pedro Martínez (agente1@digesett.gov.do)");
-            cmbTestUsers.Items.Add("Agente 2: Cabo Ana Gómez (agente2@digesett.gov.do)");
-            cmbTestUsers.SelectedIndex = 1; // Select Cajero 1 by default for easy testing
+            cmbTestUsers.Items.Add("Administrador: Ing. Ángel (admin@digesett.gov.do)");
+            cmbTestUsers.SelectedIndex = 1; // Select Admin by default for easy testing
         }
 
         private void cmbTestUsers_SelectedIndexChanged(object sender, EventArgs e)
@@ -33,25 +30,10 @@ namespace CajaAmet
                 txtPassword.Text = "";
                 txtEmail.Focus();
             }
-            else if (index == 1) // Cajero 1
+            else if (index == 1) // Admin
             {
-                txtEmail.Text = "cajero1@digesett.gov.do";
-                txtPassword.Text = "DigesettClave2026";
-            }
-            else if (index == 2) // Cajero 2
-            {
-                txtEmail.Text = "cajero2@digesett.gov.do";
-                txtPassword.Text = "DigesettClave2026";
-            }
-            else if (index == 3) // Agente 1
-            {
-                txtEmail.Text = "agente1@digesett.gov.do";
-                txtPassword.Text = "DigesettClave2026";
-            }
-            else if (index == 4) // Agente 2
-            {
-                txtEmail.Text = "agente2@digesett.gov.do";
-                txtPassword.Text = "DigesettClave2026";
+                txtEmail.Text = "admin@digesett.gov.do";
+                txtPassword.Text = "admin";
             }
         }
 

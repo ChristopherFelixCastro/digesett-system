@@ -1,43 +1,18 @@
 === INICIANDO PRUEBA DE CONCEPTO (PoC) SQLCIPHER ===
 1. Derivando clave con PBKDF2 (100,000 iteraciones + SHA-256 + MAC Salt)...
-   Clave derivada (Hex truncated): 603C0091...
+   Clave derivada (Hex truncated): 6C7D338B...
 2. Ruta de la BD: C:\Users\angel\AppData\Roaming\Digesett\actas_local.db
+   Verificando compatibilidad de la base de datos existente...
+   Base de datos existente es compatible.
 3. Abriendo base de datos e inicializando tablas...
+   Tablas creadas/verificadas con éxito.
+4. Insertando registro de prueba en 'Movimientos_Caja'...
+   Escritura exitosa.
+5. Leyendo registro de prueba desde la base de datos...
+   Registro leído: Tipo=ENTRADA, Monto=100, Desc=POC_TEST_INSERT
+   Lectura y limpieza completadas con éxito.
+6. Validando seguridad: Intentando abrir con clave incorrecta...
+   [ÉXITO DE SEGURIDAD]: Se denegó el acceso con clave incorrecta.
+   Detalle del error (esperado): SQLite Error 26: 'file is not a database'. (Código: 26)
 
-[ERROR PoC]: The type initializer for 'Microsoft.Data.Sqlite.SqliteConnection' threw an exception.
-
---- INNER EXCEPTION ---
-Message: Exception has been thrown by the target of an invocation.
-Type: System.Reflection.TargetInvocationException
-StackTrace:
-   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor)
-   at System.Reflection.RuntimeMethodInfo.UnsafeInvokeInternal(Object obj, Object[] parameters, Object[] arguments)
-   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
-   at Microsoft.Data.Sqlite.SqliteConnection..cctor()
-
---- INNER EXCEPTION ---
-Message: Library e_sqlcipher not found
-plat: win
-suffix: DLL
-possibilities (2):
-    1) C:\Users\angel\OneDrive\Documentos\GitHub\digesett-system\caja\CajaAmet\CajaAmet\bin\Debug\net48\runtimes\win-x64\native\e_sqlcipher.dll
-    2) C:\Users\angel\OneDrive\Documentos\GitHub\digesett-system\caja\CajaAmet\CajaAmet\bin\Debug\net48\e_sqlcipher.dll
-win TryLoad: C:\Users\angel\OneDrive\Documentos\GitHub\digesett-system\caja\CajaAmet\CajaAmet\bin\Debug\net48\runtimes\win-x64\native\e_sqlcipher.dll
-thrown: System.ComponentModel.Win32Exception (0x80004005): The specified module could not be found
-   at SQLitePCL.NativeLibrary.TryLoad(String name, Loader plat, Action`1 log, IntPtr& h)
-win TryLoad: C:\Users\angel\OneDrive\Documentos\GitHub\digesett-system\caja\CajaAmet\CajaAmet\bin\Debug\net48\e_sqlcipher.dll
-thrown: System.ComponentModel.Win32Exception (0x80004005): %1 is not a valid Win32 application
-   at SQLitePCL.NativeLibrary.TryLoad(String name, Loader plat, Action`1 log, IntPtr& h)
-NOT FOUND
-
-Type: System.Exception
-StackTrace:
-   at SQLitePCL.NativeLibrary.Load(String libraryName, Assembly assy, Int32 flags)
-   at SQLitePCL.Batteries_V2.MakeDynamic(String name, Int32 flags)
-   at SQLitePCL.Batteries_V2.DoDynamic_cdecl(String name, Int32 flags)
-
---- STACK TRACE ---
-   at Microsoft.Data.Sqlite.SqliteConnection..ctor(String connectionString)
-   at CajaAmet.DatabaseManager.InicializarBD(String connectionString) in C:\Users\angel\OneDrive\Documentos\GitHub\digesett-system\caja\CajaAmet\CajaAmet\DatabaseManager.cs:line 85
-   at CajaAmet.DatabaseManager.EjecutarPoC(String password, String& log) in C:\Users\angel\OneDrive\Documentos\GitHub\digesett-system\caja\CajaAmet\CajaAmet\DatabaseManager.cs:line 166
+>>> PoC COMPLETADA CON ÉXITO: SQLCipher cifra y protege la base de datos local.
