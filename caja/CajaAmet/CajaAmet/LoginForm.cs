@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CajaAmet
@@ -9,6 +10,49 @@ namespace CajaAmet
         public LoginForm()
         {
             InitializeComponent();
+            InitializeTestUsersComboBox();
+        }
+
+        private void InitializeTestUsersComboBox()
+        {
+            cmbTestUsers.Items.Clear();
+            cmbTestUsers.Items.Add("— Ingresar credenciales manualmente —");
+            cmbTestUsers.Items.Add("Cajero 1: Juan Pérez (cajero1@digesett.gov.do)");
+            cmbTestUsers.Items.Add("Cajero 2: María Rodríguez (cajero2@digesett.gov.do)");
+            cmbTestUsers.Items.Add("Agente 1: Sgt. Pedro Martínez (agente1@digesett.gov.do)");
+            cmbTestUsers.Items.Add("Agente 2: Cabo Ana Gómez (agente2@digesett.gov.do)");
+            cmbTestUsers.SelectedIndex = 1; // Select Cajero 1 by default for easy testing
+        }
+
+        private void cmbTestUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = cmbTestUsers.SelectedIndex;
+            if (index == 0) // Manual
+            {
+                txtEmail.Text = "";
+                txtPassword.Text = "";
+                txtEmail.Focus();
+            }
+            else if (index == 1) // Cajero 1
+            {
+                txtEmail.Text = "cajero1@digesett.gov.do";
+                txtPassword.Text = "DigesettClave2026";
+            }
+            else if (index == 2) // Cajero 2
+            {
+                txtEmail.Text = "cajero2@digesett.gov.do";
+                txtPassword.Text = "DigesettClave2026";
+            }
+            else if (index == 3) // Agente 1
+            {
+                txtEmail.Text = "agente1@digesett.gov.do";
+                txtPassword.Text = "DigesettClave2026";
+            }
+            else if (index == 4) // Agente 2
+            {
+                txtEmail.Text = "agente2@digesett.gov.do";
+                txtPassword.Text = "DigesettClave2026";
+            }
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -31,8 +75,18 @@ namespace CajaAmet
             
             string logResultado;
             bool exito = DatabaseManager.EjecutarPoC(password, out logResultado);
+
+            // Guardar log en disco para inspeccionar el error exacto
+            try
+            {
+                string baseDirLog = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "caja_poc_log.txt");
+                System.IO.File.WriteAllText(baseDirLog, logResultado);
+                string projectLog = @"C:\Users\angel\OneDrive\Documentos\GitHub\digesett-system\caja\CajaAmet\caja_poc_log.txt";
+                System.IO.File.WriteAllText(projectLog, logResultado);
+            }
+            catch { }
             
-            txtLog.AppendText(logResultado);
+            txtLog.Text = logResultado;
             txtLog.SelectionStart = txtLog.Text.Length;
             txtLog.ScrollToCaret();
 
@@ -45,9 +99,38 @@ namespace CajaAmet
                     MessageBoxIcon.Information
                 );
                 
+                // Determine user role and name
+                string nombre = "Usuario";
+                string rol = "AGENTE";
+                if (email.Equals("cajero1@digesett.gov.do", StringComparison.OrdinalIgnoreCase))
+                {
+                    nombre = "Juan Pérez";
+                    rol = "CAJERO";
+                }
+                else if (email.Equals("cajero2@digesett.gov.do", StringComparison.OrdinalIgnoreCase))
+                {
+                    nombre = "María Rodríguez";
+                    rol = "CAJERO";
+                }
+                else if (email.Equals("agente1@digesett.gov.do", StringComparison.OrdinalIgnoreCase))
+                {
+                    nombre = "Sgt. Pedro Martínez";
+                    rol = "AGENTE";
+                }
+                else if (email.Equals("agente2@digesett.gov.do", StringComparison.OrdinalIgnoreCase))
+                {
+                    nombre = "Cabo Ana Gómez";
+                    rol = "AGENTE";
+                }
+                else if (email.Equals("angel@digesett.gov.do", StringComparison.OrdinalIgnoreCase))
+                {
+                    nombre = "Ing. Ángel";
+                    rol = "ADMIN";
+                }
+
                 // Transición al menú principal (se abre pasando credenciales)
                 this.Hide();
-                var menuForm = new MenuPrincipalForm(email, password);
+                var menuForm = new MenuPrincipalForm(email, password, nombre, rol);
                 menuForm.ShowDialog();
                 this.Close();
             }

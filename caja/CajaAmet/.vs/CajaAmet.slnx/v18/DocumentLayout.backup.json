@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F5F9326D-4518-4900-A950-0F635B3EE1F9}|CajaAmet\\CajaAmet.csproj|c:\\users\\angel\\onedrive\\documentos\\github\\digesett-system\\caja\\cajaamet\\cajaamet\\databasemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5F9326D-4518-4900-A950-0F635B3EE1F9}|CajaAmet\\CajaAmet.csproj|solutionrelative:cajaamet\\databasemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{ED018F29-9398-B863-9348-2241E0847CF6}|CajaAmet\\CajaAmet.csproj|c:\\users\\angel\\onedrive\\documentos\\github\\digesett-system\\caja\\cajaamet\\cajaamet\\databasemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED018F29-9398-B863-9348-2241E0847CF6}|CajaAmet\\CajaAmet.csproj|solutionrelative:cajaamet\\databasemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,8 +14,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,7 +28,7 @@
               "RelativeDocumentMoniker": "CajaAmet\\DatabaseManager.cs",
               "ToolTip": "C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\CajaAmet\\DatabaseManager.cs",
               "RelativeToolTip": "CajaAmet\\DatabaseManager.cs",
-              "ViewState": "AgIAAO4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAkwGUAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-19T00:36:02.169Z",
               "EditorCaption": ""

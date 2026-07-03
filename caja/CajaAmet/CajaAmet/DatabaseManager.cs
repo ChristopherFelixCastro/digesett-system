@@ -10,13 +10,36 @@ namespace CajaAmet
 {
     public static class DatabaseManager
     {
+        static DatabaseManager()
+        {
+            try
+            {
+                // Inicializar explícitamente el proveedor de SQLitePCL con SQLCipher
+                // Esto es crítico en .NET Framework 4.8 para evitar que se cargue
+                // el proveedor SQLite estándar sin cifrado.
+                SQLitePCL.Batteries.Init();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error al inicializar SQLitePCL: " + ex.Message);
+            }
+        }
+
         public static string DerivarClave(string password)
         {
-            // Obtener ID único del dispositivo (dirección MAC de la red principal)
-            var mac = NetworkInterface.GetAllNetworkInterfaces()
-                .Where(n => n.OperationalStatus == OperationalStatus.Up)
-                .Select(n => n.GetPhysicalAddress().ToString())
-                .FirstOrDefault();
+            string mac = null;
+            try
+            {
+                // Obtener ID único del dispositivo (dirección MAC de la red principal)
+                mac = NetworkInterface.GetAllNetworkInterfaces()
+                    .Where(n => n.OperationalStatus == OperationalStatus.Up)
+                    .Select(n => n.GetPhysicalAddress().ToString())
+                    .FirstOrDefault();
+            }
+            catch
+            {
+                // Fallback silencioso en entornos restringidos o sin tarjetas de red activas
+            }
 
             if (string.IsNullOrEmpty(mac))
             {
@@ -229,6 +252,16 @@ namespace CajaAmet
             catch (Exception ex)
             {
                 sb.AppendLine($"\n[ERROR PoC]: {ex.Message}");
+                var inner = ex.InnerException;
+                while (inner != null)
+                {
+                    sb.AppendLine($"\n--- INNER EXCEPTION ---");
+                    sb.AppendLine($"Message: {inner.Message}");
+                    sb.AppendLine($"Type: {inner.GetType().FullName}");
+                    sb.AppendLine($"StackTrace:\n{inner.StackTrace}");
+                    inner = inner.InnerException;
+                }
+                sb.AppendLine($"\n--- STACK TRACE ---");
                 sb.AppendLine(ex.StackTrace);
                 log = sb.ToString();
                 return false;

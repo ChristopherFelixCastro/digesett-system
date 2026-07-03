@@ -18,6 +18,8 @@ namespace CajaAmet
         private System.Windows.Forms.Label lblLog;
         private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.Label lblFooter;
+        private System.Windows.Forms.Label lblTestUsers;
+        private System.Windows.Forms.ComboBox cmbTestUsers;
 
         protected override void Dispose(bool disposing)
         {
@@ -42,6 +44,8 @@ namespace CajaAmet
             this.lblLog = new System.Windows.Forms.Label();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.lblFooter = new System.Windows.Forms.Label();
+            this.lblTestUsers = new System.Windows.Forms.Label();
+            this.cmbTestUsers = new System.Windows.Forms.ComboBox();
             this.pnlHeader.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -87,12 +91,37 @@ namespace CajaAmet
             this.pnlAccent.Size = new System.Drawing.Size(484, 4);
             this.pnlAccent.TabIndex = 1;
             // 
+            // lblTestUsers
+            // 
+            this.lblTestUsers.AutoSize = true;
+            this.lblTestUsers.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTestUsers.ForeColor = System.Drawing.Color.FromArgb(74, 222, 128);
+            this.lblTestUsers.Location = new System.Drawing.Point(40, 92);
+            this.lblTestUsers.Name = "lblTestUsers";
+            this.lblTestUsers.Size = new System.Drawing.Size(193, 17);
+            this.lblTestUsers.TabIndex = 10;
+            this.lblTestUsers.Text = "Seleccionar Usuario de Prueba:";
+            // 
+            // cmbTestUsers
+            // 
+            this.cmbTestUsers.BackColor = System.Drawing.Color.FromArgb(26, 58, 29);
+            this.cmbTestUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTestUsers.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTestUsers.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbTestUsers.ForeColor = System.Drawing.Color.White;
+            this.cmbTestUsers.FormattingEnabled = true;
+            this.cmbTestUsers.Location = new System.Drawing.Point(43, 114);
+            this.cmbTestUsers.Name = "cmbTestUsers";
+            this.cmbTestUsers.Size = new System.Drawing.Size(398, 25);
+            this.cmbTestUsers.TabIndex = 11;
+            this.cmbTestUsers.SelectedIndexChanged += new System.EventHandler(this.cmbTestUsers_SelectedIndexChanged);
+            // 
             // lblEmail
             // 
             this.lblEmail.AutoSize = true;
             this.lblEmail.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEmail.ForeColor = System.Drawing.Color.FromArgb(220, 252, 231);
-            this.lblEmail.Location = new System.Drawing.Point(40, 95);
+            this.lblEmail.Location = new System.Drawing.Point(40, 150);
             this.lblEmail.Name = "lblEmail";
             this.lblEmail.Size = new System.Drawing.Size(147, 17);
             this.lblEmail.TabIndex = 2;
@@ -104,18 +133,17 @@ namespace CajaAmet
             this.txtEmail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtEmail.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtEmail.ForeColor = System.Drawing.Color.White;
-            this.txtEmail.Location = new System.Drawing.Point(43, 117);
+            this.txtEmail.Location = new System.Drawing.Point(43, 172);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(398, 25);
             this.txtEmail.TabIndex = 3;
-            this.txtEmail.Text = "angel@digesett.gov.do";
             // 
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
             this.lblPassword.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(220, 252, 231);
-            this.lblPassword.Location = new System.Drawing.Point(40, 155);
+            this.lblPassword.Location = new System.Drawing.Point(40, 210);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(206, 17);
             this.lblPassword.TabIndex = 4;
@@ -127,12 +155,11 @@ namespace CajaAmet
             this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPassword.ForeColor = System.Drawing.Color.White;
-            this.txtPassword.Location = new System.Drawing.Point(43, 177);
+            this.txtPassword.Location = new System.Drawing.Point(43, 232);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(398, 25);
             this.txtPassword.TabIndex = 5;
-            this.txtPassword.Text = "DigesettClave2026";
             // 
             // btnLogin
             // 
@@ -144,7 +171,7 @@ namespace CajaAmet
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(43, 220);
+            this.btnLogin.Location = new System.Drawing.Point(43, 275);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(398, 38);
             this.btnLogin.TabIndex = 6;
@@ -157,7 +184,7 @@ namespace CajaAmet
             this.lblLog.AutoSize = true;
             this.lblLog.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLog.ForeColor = System.Drawing.Color.FromArgb(134, 239, 172);
-            this.lblLog.Location = new System.Drawing.Point(40, 275);
+            this.lblLog.Location = new System.Drawing.Point(40, 330);
             this.lblLog.Name = "lblLog";
             this.lblLog.Size = new System.Drawing.Size(242, 15);
             this.lblLog.TabIndex = 7;
@@ -169,12 +196,12 @@ namespace CajaAmet
             this.txtLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtLog.Font = new System.Drawing.Font("Consolas", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtLog.ForeColor = System.Drawing.Color.FromArgb(74, 222, 128);
-            this.txtLog.Location = new System.Drawing.Point(43, 295);
+            this.txtLog.Location = new System.Drawing.Point(43, 350);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(398, 200);
+            this.txtLog.Size = new System.Drawing.Size(398, 150);
             this.txtLog.TabIndex = 8;
             this.txtLog.Text = "Esperando inicio de sesión para ejecutar la Prueba de Concepto de SQLCipher...\r\n";
             // 
@@ -183,7 +210,7 @@ namespace CajaAmet
             this.lblFooter.AutoSize = true;
             this.lblFooter.Font = new System.Drawing.Font("Consolas", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFooter.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
-            this.lblFooter.Location = new System.Drawing.Point(145, 510);
+            this.lblFooter.Location = new System.Drawing.Point(145, 515);
             this.lblFooter.Name = "lblFooter";
             this.lblFooter.Size = new System.Drawing.Size(193, 13);
             this.lblFooter.TabIndex = 9;
@@ -194,7 +221,7 @@ namespace CajaAmet
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(13, 31, 15);
-            this.ClientSize = new System.Drawing.Size(484, 536);
+            this.ClientSize = new System.Drawing.Size(484, 545);
             this.Controls.Add(this.lblFooter);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.lblLog);
@@ -203,13 +230,15 @@ namespace CajaAmet
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.lblEmail);
+            this.Controls.Add(this.cmbTestUsers);
+            this.Controls.Add(this.lblTestUsers);
             this.Controls.Add(this.pnlAccent);
             this.Controls.Add(this.pnlHeader);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DIGESETT — Acceso Segura y PoC SQLCipher";
+            this.Text = "DIGESETT — Acceso Seguro y PoC SQLCipher";
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();
             this.ResumeLayout(false);

@@ -9,16 +9,30 @@ namespace CajaAmet
     {
         private string emailAgente;
         private string passwordAgente;
+        private string nombreAgente;
+        private string rolAgente;
 
-        public MenuPrincipalForm(string email, string password)
+        public MenuPrincipalForm(string email, string password, string nombre = "Ángel", string rol = "AGENTE")
         {
             InitializeComponent();
             this.emailAgente = email;
             this.passwordAgente = password;
+            this.nombreAgente = nombre;
+            this.rolAgente = rol;
 
-            lblWelcome.Text = $"Sesión Activa: {emailAgente}";
+            lblWelcome.Text = $"Sesión Activa: {nombreAgente} ({rolAgente})";
             lblDbPath.Text = $"Base de datos cifrada: {DatabaseManager.ObtenerDbPath()}";
             
+            // Adjust options colors based on role
+            if (rolAgente == "CAJERO")
+            {
+                btnHandheld.BackColor = Color.FromArgb(71, 85, 105); // Gray out slightly to indicate it's not their main role
+            }
+            else if (rolAgente == "AGENTE")
+            {
+                btnCaja.BackColor = Color.FromArgb(71, 85, 105); // Gray out slightly to indicate it's not their main role
+            }
+
             // Chequeo inicial de red
             VerificarConectividadRed();
         }
@@ -55,6 +69,17 @@ namespace CajaAmet
 
         private void btnHandheld_Click(object sender, EventArgs e)
         {
+            if (rolAgente == "CAJERO")
+            {
+                var result = MessageBox.Show(
+                    "Su rol asignado es CAJERO. El Modo Handheld es para Agentes de Calle.\n¿Desea ingresar de todos modos para fines de prueba?",
+                    "Aviso de Rol",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+                if (result != DialogResult.Yes) return;
+            }
+
             MessageBox.Show(
                 "Iniciando Modo Handheld (Agente de Calle)...\n\nEste módulo le permitirá registrar actas de infracción en la vía pública de manera offline-first.", 
                 "Modo Handheld", 
@@ -65,12 +90,20 @@ namespace CajaAmet
 
         private void btnCaja_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "Iniciando Modo Caja (Ventanilla)...\n\nEste módulo le permitirá gestionar aperturas, registrar cobros de multas y emitir recibos oficiales.", 
-                "Modo Caja", 
-                MessageBoxButtons.OK, 
-                MessageBoxIcon.Information
-            );
+            if (rolAgente == "AGENTE")
+            {
+                var result = MessageBox.Show(
+                    "Su rol asignado es AGENTE. El Modo Caja es para Cajeros de Ventanilla.\n¿Desea ingresar de todos modos para fines de prueba?",
+                    "Aviso de Rol",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+                if (result != DialogResult.Yes) return;
+            }
+
+            // Abrir el módulo de Caja
+            var cajaForm = new CajaForm(emailAgente, passwordAgente);
+            cajaForm.ShowDialog();
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
