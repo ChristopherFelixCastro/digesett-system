@@ -1,5 +1,337 @@
 openapi: "3.0.3"
 info:
   title: DIGESETT API
-  version: "1.0.0"
-  description: "Contrato de integración del Sistema Digital DIGESETT — pendiente de definición final (Semana 2)"
+  version: 1.0.0
+servers:
+  - url: http://localhost:6001
+    description: Middleware Yeimi
+  - url: http://localhost:5001
+    description: Core Antony
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /api/mock/jce/cedula/{id}:
+    get:
+      tags:
+        - Mocks Gubernamentales
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          example: "001-0000001-0"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cedula:
+                    type: string
+                  nombre_completo:
+                    type: string
+                  estado:
+                    type: string
+                    enum: [ACTIVO, SUSPENDIDO]
+              example:
+                cedula: "001-0000001-0"
+                nombre_completo: "Juan Perez"
+                estado: "ACTIVO"
+        '404':
+          description: Not Found
+        '503':
+          description: Service Unavailable
+  /api/mock/dgii/placa/{placa}:
+    get:
+      tags:
+        - Mocks Gubernamentales
+      parameters:
+        - in: path
+          name: placa
+          required: true
+          schema:
+            type: string
+          example: "A123456"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  placa:
+                    type: string
+                  marca:
+                    type: string
+                  modelo:
+                    type: string
+                  propietario_cedula:
+                    type: string
+                  marbete_vigente:
+                    type: boolean
+              example:
+                placa: "A123456"
+                marca: "Toyota"
+                modelo: "Corolla"
+                propietario_cedula: "001-0000001-0"
+                marbete_vigente: true
+        '404':
+          description: Not Found
+        '503':
+          description: Service Unavailable
+  /api/mock/pgr/antecedentes/{cedula}:
+    get:
+      tags:
+        - Mocks Gubernamentales
+      parameters:
+        - in: path
+          name: cedula
+          required: true
+          schema:
+            type: string
+          example: "001-0000001-0"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cedula:
+                    type: string
+                  nombre_completo:
+                    type: string
+                  tiene_antecedentes:
+                    type: boolean
+                  detalle:
+                    type: string
+              example:
+                cedula: "001-0000001-0"
+                nombre_completo: "Juan Perez"
+                tiene_antecedentes: false
+                detalle: "Sin antecedentes penales registrados"
+        '404':
+          description: Not Found
+        '503':
+          description: Service Unavailable
+  /api/mock/intrant/licencia/{cedula}:
+    get:
+      tags:
+        - Mocks Gubernamentales
+      parameters:
+        - in: path
+          name: cedula
+          required: true
+          schema:
+            type: string
+          example: "001-0000001-0"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cedula:
+                    type: string
+                  numero_licencia:
+                    type: string
+                  categoria:
+                    type: string
+                  vigente:
+                    type: boolean
+                  licencia_bloqueada:
+                    type: boolean
+              example:
+                cedula: "001-0000001-0"
+                numero_licencia: "LIC-1234"
+                categoria: "3"
+                vigente: true
+                licencia_bloqueada: false
+        '404':
+          description: Not Found
+        '503':
+          description: Service Unavailable
+  /pagos/procesar:
+    post:
+      tags:
+        - Pagos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                acta_uuid:
+                  type: string
+                monto_multa:
+                  type: number
+                monto_recargo:
+                  type: number
+                numero_tarjeta:
+                  type: string
+                nombre_titular:
+                  type: string
+                cvv:
+                  type: string
+                fecha_vencimiento:
+                  type: string
+              required:
+                - acta_uuid
+                - numero_tarjeta
+                - cvv
+            example:
+              acta_uuid: "123e4567-e89b-12d3-a456-426614174000"
+              monto_multa: 1000.0
+              monto_recargo: 100.0
+              numero_tarjeta: "1234567812345678"
+              nombre_titular: "Juan Perez"
+              cvv: "123"
+              fecha_vencimiento: "12/25"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numero_transaccion:
+                    type: string
+                  acta_uuid:
+                    type: string
+                  monto_total:
+                    type: number
+                  estado:
+                    type: string
+                  fecha_pago:
+                    type: string
+              example:
+                numero_transaccion: "987e6543-e21b-34d3-b654-426614174000"
+                acta_uuid: "123e4567-e89b-12d3-a456-426614174000"
+                monto_total: 1100.0
+                estado: "PAGADA"
+                fecha_pago: "2024-11-20T10:00:00Z"
+        '400':
+          description: Bad Request
+  /api/v1/{ruta}:
+    get:
+      tags:
+        - Proxy Core
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: ruta
+          required: true
+          schema:
+            type: string
+          example: "usuarios"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '503':
+          description: Service Unavailable
+    post:
+      tags:
+        - Proxy Core
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: ruta
+          required: true
+          schema:
+            type: string
+          example: "actas"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+            example:
+              campo: "valor"
+      responses:
+        '200':
+          description: OK
+        '202':
+          description: Accepted
+        '401':
+          description: Unauthorized
+        '503':
+          description: Service Unavailable
+    put:
+      tags:
+        - Proxy Core
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: ruta
+          required: true
+          schema:
+            type: string
+          example: "actas/1"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+            example:
+              campo: "valor_nuevo"
+      responses:
+        '200':
+          description: OK
+        '202':
+          description: Accepted
+        '401':
+          description: Unauthorized
+        '503':
+          description: Service Unavailable
+    patch:
+      tags:
+        - Proxy Core
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: ruta
+          required: true
+          schema:
+            type: string
+          example: "actas/1"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+            example:
+              campo: "valor_parcial"
+      responses:
+        '200':
+          description: OK
+        '202':
+          description: Accepted
+        '401':
+          description: Unauthorized
+        '503':
+          description: Service Unavailable

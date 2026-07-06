@@ -1,0 +1,33 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DigesettMiddleware": "Server=TU_SERVIDOR\\SQLEXPRESS;Database=DigesettMiddleware;Trusted_Connection=True;TrustServerCertificate=True;"
+  },
+  "Jwt": {
+    "SecretKey": "PEDIR_A_ANTONY_POR_CANAL_PRIVADO",
+    "Issuer": "DigesettCore",
+    "Audience": "DigesettClients"
+  },
+  "CoreApi": {
+    "BaseUrl": "http://localhost:5001"
+  },
+  "IpRateLimiting": {
+    "EnableEndpointRateLimiting": true,
+    "StackBlockedRequests": false,
+    "RealIpHeader": "X-Real-IP",
+    "ClientIdHeader": "X-ClientId",
+    "HttpStatusCode": 429,
+    "GeneralRules": [
+      { "Endpoint": "GET:/api/mock/jce/cedula/*", "Period": "1m", "Limit": 5 },
+      { "Endpoint": "GET:/api/mock/dgii/placa/*", "Period": "1m", "Limit": 5 },
+      { "Endpoint": "GET:/api/mock/pgr/antecedentes/*", "Period": "1m", "Limit": 5 },
+      { "Endpoint": "GET:/api/mock/intrant/licencia/*", "Period": "1m", "Limit": 5 }
+    ]
+  },
+  "IpRateLimitPolicies": {}
+}

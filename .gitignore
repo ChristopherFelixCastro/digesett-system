@@ -5,7 +5,7 @@ obj/
 # Configuración de Visual Studio (propia de cada computadora)
 .vs/
 
-# Configuración de Visual Studio Code (si alguien la usa)
+# Configuración de Visual Studio Code
 .vscode/
 
 # Archivos con datos sensibles (contraseñas, cadenas de conexión)
