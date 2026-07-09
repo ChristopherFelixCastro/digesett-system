@@ -36,6 +36,24 @@ namespace Amet.Core.Controllers
             return Ok(usuario);
         }
 
+        // Obtener estado del usuario (Para Middleware)
+        [HttpGet("{id}/estado")]
+        public async Task<IActionResult> GetEstadoUsuario(Guid id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+
+            if (usuario == null)
+                return NotFound();
+
+            return Ok(new
+            {
+                usuario_id = usuario.Id,
+                nombre = usuario.Nombre,
+                rol = usuario.Rol,
+                estado = usuario.Estado
+            });
+        }
+
         // Crear usuario
         [HttpPost]
         public async Task<IActionResult> CrearUsuario([FromBody] Usuario usuario)
@@ -43,6 +61,7 @@ namespace Amet.Core.Controllers
             usuario.Id = Guid.NewGuid();
 
             _context.Usuarios.Add(usuario);
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
