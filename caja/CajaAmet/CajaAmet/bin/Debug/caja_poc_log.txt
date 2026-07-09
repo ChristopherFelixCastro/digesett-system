@@ -1,0 +1,15 @@
+=== INICIANDO PRUEBA DE CONCEPTO (PoC) SQLCIPHER ===
+1. Derivando clave con PBKDF2 (100,000 iteraciones + SHA-256 + MAC Salt)...
+   Clave derivada (Hex truncated): B7879371...
+2. Ruta de la BD: C:\Users\angel\AppData\Roaming\Digesett\actas_local.db
+   Verificando compatibilidad de la base de datos existente...
+   [INFO]: La base de datos existe pero usa otra clave o no está cifrada.
+           Eliminando base de datos incompatible para iniciar de nuevo...
+   [ERROR] No se pudo eliminar la base de datos incompatible: The process cannot access the file 'C:\Users\angel\AppData\Roaming\Digesett\actas_local.db' because it is being used by another process.
+
+[ERROR PoC]: The process cannot access the file 'C:\Users\angel\AppData\Roaming\Digesett\actas_local.db' because it is being used by another process.
+
+--- STACK TRACE ---
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.File.InternalDelete(String path, Boolean checkHost)
+   at CajaAmet.DatabaseManager.EjecutarPoC(String password, String& log) in C:\Users\angel\OneDrive\Documentos\GitHub\digesett-system\caja\CajaAmet\CajaAmet\DatabaseManager.cs:line 181

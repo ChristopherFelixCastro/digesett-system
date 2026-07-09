@@ -27,30 +27,16 @@ namespace CajaAmet
 
         public static string DerivarClave(string password)
         {
-            string mac = null;
-            try
-            {
-                // Obtener ID único del dispositivo (dirección MAC de la red principal)
-                mac = NetworkInterface.GetAllNetworkInterfaces()
-                    .Where(n => n.OperationalStatus == OperationalStatus.Up)
-                    .Select(n => n.GetPhysicalAddress().ToString())
-                    .FirstOrDefault();
-            }
-            catch
-            {
-                // Fallback silencioso en entornos restringidos o sin tarjetas de red activas
-            }
-
-            if (string.IsNullOrEmpty(mac))
-            {
-                mac = "DIGESETT_FALLBACK_SALT";
-            }
+            // Usamos una sal estática para garantizar que la clave derivada sea la misma
+            // en cualquier dispositivo, permitiendo la portabilidad del archivo de base de datos
+            // local cifrado (actas_local.db) cuando se transfiere de una máquina a otra.
+            string salt = "DIGESETT_SYSTEM_SECURITY_SALT_2026";
 
             // Derivar clave con PBKDF2 — 100,000 iteraciones (estándar NIST)
             // En .NET Framework 4.8 instanciamos Rfc2898DeriveBytes indicando SHA256
             using (var pbkdf2 = new Rfc2898DeriveBytes(
                 Encoding.UTF8.GetBytes(password),
-                Encoding.UTF8.GetBytes(mac),
+                Encoding.UTF8.GetBytes(salt),
                 100000,
                 HashAlgorithmName.SHA256))
             {
@@ -77,7 +63,7 @@ namespace CajaAmet
         public static string ObtenerConnectionString(string claveHex)
         {
             var dbPath = ObtenerDbPath();
-            return $"Data Source={dbPath};Password={claveHex};";
+            return $"Data Source={dbPath};Password={claveHex};Pooling=False;";
         }
 
         public static void InicializarBD(string connectionString)
@@ -186,6 +172,10 @@ namespace CajaAmet
                         sb.AppendLine("           Eliminando base de datos incompatible para iniciar de nuevo...");
                         try
                         {
+                            SqliteConnection.ClearAllPools();
+                            GC.Collect();
+                            GC.WaitForPendingFinalizers();
+                            System.Threading.Thread.Sleep(200);
                             File.Delete(dbPath);
                         }
                         catch (Exception delEx)
