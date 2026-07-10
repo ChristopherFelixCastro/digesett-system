@@ -27,16 +27,26 @@ namespace CajaAmet
 
         public static string DerivarClave(string password)
         {
+<<<<<<< Updated upstream
             // Usamos una sal estática para garantizar que la clave derivada sea la misma
             // en cualquier dispositivo, permitiendo la portabilidad del archivo de base de datos
             // local cifrado (actas_local.db) cuando se transfiere de una máquina a otra.
             string salt = "DIGESETT_SYSTEM_SECURITY_SALT_2026";
+=======
+            // Sal fija segura y consistente para permitir portabilidad entre dispositivos 
+            // y evitar bloqueos al cambiar el estado de red (Wi-Fi/Ethernet)
+            byte[] salt = Encoding.UTF8.GetBytes("DIGESETT_SYSTEM_SECURE_SALT_2026");
+>>>>>>> Stashed changes
 
             // Derivar clave con PBKDF2 — 100,000 iteraciones (estándar NIST)
             // En .NET Framework 4.8 instanciamos Rfc2898DeriveBytes indicando SHA256
             using (var pbkdf2 = new Rfc2898DeriveBytes(
                 Encoding.UTF8.GetBytes(password),
+<<<<<<< Updated upstream
                 Encoding.UTF8.GetBytes(salt),
+=======
+                salt,
+>>>>>>> Stashed changes
                 100000,
                 HashAlgorithmName.SHA256))
             {
@@ -112,6 +122,26 @@ namespace CajaAmet
                             requiere_retencion INTEGER NOT NULL DEFAULT 0
                         );";
                     cmd.ExecuteNonQuery();
+                }
+
+                // Semilla para Infracciones_Cache si está vacía
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT COUNT(*) FROM Infracciones_Cache;";
+                    long count = Convert.ToInt64(cmd.ExecuteScalar());
+                    if (count == 0)
+                    {
+                        cmd.CommandText = @"
+                            INSERT INTO Infracciones_Cache (codigo, descripcion, categoria, monto_particular, monto_motocicleta, monto_carga, requiere_retencion)
+                            VALUES 
+                            ('INF001', 'Cruzar semáforo en rojo', 'Tránsito', 1000.0, 500.0, 1500.0, 0),
+                            ('INF002', 'Exceso de velocidad', 'Seguridad', 1500.0, 750.0, 2500.0, 0),
+                            ('INF003', 'No usar cinturón de seguridad', 'Seguridad', 500.0, 0.0, 500.0, 0),
+                            ('INF004', 'Conducir bajo efectos del alcohol', 'Grave', 5000.0, 3000.0, 8000.0, 1),
+                            ('INF005', 'Estacionar en zona prohibida', 'Estacionamiento', 800.0, 400.0, 1200.0, 1),
+                            ('INF006', 'Falta de placa o matrícula', 'Documentación', 2000.0, 1000.0, 2000.0, 1);";
+                        cmd.ExecuteNonQuery();
+                    }
                 }
 
                 // Movimientos de caja: Movimientos_Caja
@@ -287,6 +317,15 @@ namespace CajaAmet
                 }
                 sb.AppendLine($"\n--- STACK TRACE ---");
                 sb.AppendLine(ex.StackTrace);
+                
+                var inner = ex.InnerException;
+                while (inner != null)
+                {
+                    sb.AppendLine($"\n[INNER ERROR]: {inner.Message}");
+                    sb.AppendLine(inner.StackTrace);
+                    inner = inner.InnerException;
+                }
+                
                 log = sb.ToString();
                 return false;
             }

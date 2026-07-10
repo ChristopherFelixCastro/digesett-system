@@ -69,6 +69,7 @@ namespace CajaAmet
 
         private void btnHandheld_Click(object sender, EventArgs e)
         {
+<<<<<<< Updated upstream
             if (rolAgente == "CAJERO")
             {
                 var result = MessageBox.Show(
@@ -86,10 +87,17 @@ namespace CajaAmet
                 MessageBoxButtons.OK, 
                 MessageBoxIcon.Information
             );
+=======
+            string claveHex = DatabaseManager.DerivarClave(this.passwordAgente);
+            string connString = DatabaseManager.ObtenerConnectionString(claveHex);
+            var handheldForm = new HandheldForm(this.emailAgente, connString);
+            handheldForm.ShowDialog();
+>>>>>>> Stashed changes
         }
 
         private void btnCaja_Click(object sender, EventArgs e)
         {
+<<<<<<< Updated upstream
             if (rolAgente == "AGENTE")
             {
                 var result = MessageBox.Show(
@@ -103,6 +111,11 @@ namespace CajaAmet
 
             // Abrir el módulo de Caja
             var cajaForm = new CajaForm(emailAgente, passwordAgente);
+=======
+            string claveHex = DatabaseManager.DerivarClave(this.passwordAgente);
+            string connString = DatabaseManager.ObtenerConnectionString(claveHex);
+            var cajaForm = new CajaForm(this.emailAgente, connString);
+>>>>>>> Stashed changes
             cajaForm.ShowDialog();
         }
 

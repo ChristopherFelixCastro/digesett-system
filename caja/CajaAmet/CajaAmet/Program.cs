@@ -14,6 +14,9 @@ namespace CajaAmet
         [STAThread]
         static void Main()
         {
+            // Inicializar el proveedor SQLitePCL para SQLCipher
+            SQLitePCL.Batteries.Init();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new LoginForm());

@@ -1,6 +1,10 @@
 {
   "version": 2,
+<<<<<<< Updated upstream
   "dgSpecHash": "J4IVgiGOjvs=",
+=======
+  "dgSpecHash": "05tFgAOyFqc=",
+>>>>>>> Stashed changes
   "success": true,
   "projectFilePath": "C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\CajaAmet\\CajaAmet.csproj",
   "expectedPackageFiles": [

@@ -1,10 +1,15 @@
 using System;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+=======
+using System.Data;
+using System.Drawing;
+>>>>>>> Stashed changes
 =======
 using System.Data;
 using System.Drawing;
@@ -16,6 +21,7 @@ namespace CajaAmet
 {
     public partial class CajaForm : Form
     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         private string emailCajero;
         private string connectionString;
@@ -45,6 +51,8 @@ namespace CajaAmet
             string claveHex = DatabaseManager.DerivarClave(password);
             this.connectionString = DatabaseManager.ObtenerConnectionString(claveHex);
 =======
+=======
+>>>>>>> Stashed changes
         private string cashierId;
         private string connectionString;
         private string selectedActaUuid = null;
@@ -129,11 +137,15 @@ namespace CajaAmet
                 Width = 110,
                 ReadOnly = true
             });
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         }
 
         private void CajaForm_Load(object sender, EventArgs e)
         {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
             lblNavCajeroStatus.Text = $"Cajero:\n{emailCajero}";
             
@@ -149,6 +161,8 @@ namespace CajaAmet
             try
             {
 =======
+=======
+>>>>>>> Stashed changes
             CargarActasPendientes("");
             LimpiarSeleccion();
         }
@@ -158,12 +172,16 @@ namespace CajaAmet
             try
             {
                 DataTable dt = new DataTable();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 using (var connection = new SqliteConnection(connectionString))
                 {
                     connection.Open();
                     using (var cmd = connection.CreateCommand())
                     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                         cmd.CommandText = @"
                             SELECT tipo, monto, timestamp, cajero_id 
@@ -833,6 +851,8 @@ namespace CajaAmet
 
             string timestampStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 =======
+=======
+>>>>>>> Stashed changes
                         if (string.IsNullOrEmpty(queryText))
                         {
                             cmd.CommandText = @"
@@ -941,6 +961,9 @@ namespace CajaAmet
             string descripcionPago = string.IsNullOrEmpty(txtDescPago.Text.Trim()) 
                 ? $"Cobro de multa por acta {selectedActaUuid.Substring(0, 8)}" 
                 : txtDescPago.Text.Trim();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             try
@@ -948,6 +971,7 @@ namespace CajaAmet
                 using (var connection = new SqliteConnection(connectionString))
                 {
                     connection.Open();
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     using (var cmd = connection.CreateCommand())
                     {
@@ -972,6 +996,8 @@ namespace CajaAmet
             }
         }
 =======
+=======
+>>>>>>> Stashed changes
                     using (var transaction = connection.BeginTransaction())
                     {
                         try
@@ -1048,6 +1074,9 @@ namespace CajaAmet
         {
             this.Close();
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 }

@@ -4,6 +4,7 @@ namespace CajaAmet
     {
         private System.ComponentModel.IContainer components = null;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
         // Sidebar
         private System.Windows.Forms.Panel pnlSidebar;
@@ -95,6 +96,8 @@ namespace CajaAmet
         private System.Windows.Forms.Label lblCierreDiferenciaValor;
         private System.Windows.Forms.Button btnCerrarCaja;
 =======
+=======
+>>>>>>> Stashed changes
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblSubtitle;
@@ -113,6 +116,9 @@ namespace CajaAmet
         private System.Windows.Forms.Button btnPagar;
         private System.Windows.Forms.Button btnVolver;
         private System.Windows.Forms.Label lblCajero;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
         protected override void Dispose(bool disposing)
@@ -126,6 +132,7 @@ namespace CajaAmet
 
         private void InitializeComponent()
         {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.lblSidebarTitle = new System.Windows.Forms.Label();
@@ -1218,6 +1225,8 @@ namespace CajaAmet
             this.btnCerrarCaja.Click += new System.EventHandler(this.btnCerrarCaja_Click);
             
 =======
+=======
+>>>>>>> Stashed changes
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlHeader = new System.Windows.Forms.Panel();
@@ -1493,6 +1502,9 @@ namespace CajaAmet
             this.lblCajero.Size = new System.Drawing.Size(107, 15);
             this.lblCajero.TabIndex = 9;
             this.lblCajero.Text = "Cajero ID: Ninguno";
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             // 
             // CajaForm
@@ -1501,11 +1513,14 @@ namespace CajaAmet
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(13, 31, 15);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             this.ClientSize = new System.Drawing.Size(800, 600);
             this.Controls.Add(this.pnlSidebarAccent);
             this.Controls.Add(this.pnlContentContainer);
             this.Controls.Add(this.pnlSidebar);
 =======
+=======
+>>>>>>> Stashed changes
             this.ClientSize = new System.Drawing.Size(784, 511);
             this.Controls.Add(this.lblCajero);
             this.Controls.Add(this.btnVolver);
@@ -1517,11 +1532,15 @@ namespace CajaAmet
             this.Controls.Add(this.lblBuscar);
             this.Controls.Add(this.pnlAccent);
             this.Controls.Add(this.pnlHeader);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "CajaForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
             this.Text = "DIGESETT — Módulo de Caja (Ventanilla)";
             this.Load += new System.EventHandler(this.CajaForm_Load);
@@ -1542,6 +1561,8 @@ namespace CajaAmet
             this.pnlCierre.PerformLayout();
             this.ResumeLayout(false);
 =======
+=======
+>>>>>>> Stashed changes
             this.Text = "DIGESETT — Caja Mode";
             this.Load += new System.EventHandler(this.CajaForm_Load);
             this.pnlHeader.ResumeLayout(false);
@@ -1551,6 +1572,9 @@ namespace CajaAmet
             this.gbCobro.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
         }
