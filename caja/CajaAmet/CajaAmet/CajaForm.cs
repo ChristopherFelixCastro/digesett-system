@@ -1,9 +1,14 @@
 using System;
+<<<<<<< Updated upstream
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+=======
+using System.Data;
+using System.Drawing;
+>>>>>>> Stashed changes
 using System.Windows.Forms;
 using Microsoft.Data.Sqlite;
 
@@ -11,6 +16,7 @@ namespace CajaAmet
 {
     public partial class CajaForm : Form
     {
+<<<<<<< Updated upstream
         private string emailCajero;
         private string connectionString;
         
@@ -38,10 +44,97 @@ namespace CajaAmet
             // Derivar clave para la base de datos sqlite local cifrada
             string claveHex = DatabaseManager.DerivarClave(password);
             this.connectionString = DatabaseManager.ObtenerConnectionString(claveHex);
+=======
+        private string cashierId;
+        private string connectionString;
+        private string selectedActaUuid = null;
+        private double selectedMonto = 0.0;
+        private string selectedConductor = "";
+
+        public CajaForm(string cashierId, string connectionString)
+        {
+            InitializeComponent();
+            this.cashierId = cashierId;
+            this.connectionString = connectionString;
+
+            lblCajero.Text = $"Cajero ID: {this.cashierId}";
+            ConfigurarColumnasGrid();
+        }
+
+        private void ConfigurarColumnasGrid()
+        {
+            dgvActas.AutoGenerateColumns = false;
+            dgvActas.Columns.Clear();
+
+            dgvActas.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "id",
+                HeaderText = "UUID Acta",
+                Name = "colId",
+                Width = 80,
+                ReadOnly = true
+            });
+
+            dgvActas.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "conductor_cedula",
+                HeaderText = "Cédula",
+                Name = "colCedula",
+                Width = 90,
+                ReadOnly = true
+            });
+
+            dgvActas.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "conductor_nombre",
+                HeaderText = "Conductor",
+                Name = "colNombre",
+                Width = 140,
+                ReadOnly = true
+            });
+
+            dgvActas.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "tipo_infraccion_desc",
+                HeaderText = "Infracción",
+                Name = "colInfraccion",
+                Width = 150,
+                ReadOnly = true
+            });
+
+            dgvActas.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "monto_base",
+                HeaderText = "Monto",
+                Name = "colMonto",
+                Width = 80,
+                ReadOnly = true,
+                DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleRight, Format = "N2" }
+            });
+
+            dgvActas.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "placa",
+                HeaderText = "Placa",
+                Name = "colPlaca",
+                Width = 70,
+                ReadOnly = true
+            });
+            
+            dgvActas.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "fecha_hecho",
+                HeaderText = "Fecha",
+                Name = "colFecha",
+                Width = 110,
+                ReadOnly = true
+            });
+>>>>>>> Stashed changes
         }
 
         private void CajaForm_Load(object sender, EventArgs e)
         {
+<<<<<<< Updated upstream
             lblNavCajeroStatus.Text = $"Cajero:\n{emailCajero}";
             
             // Check status of Caja on startup
@@ -55,11 +148,23 @@ namespace CajaAmet
         {
             try
             {
+=======
+            CargarActasPendientes("");
+            LimpiarSeleccion();
+        }
+
+        private void CargarActasPendientes(string queryText)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+>>>>>>> Stashed changes
                 using (var connection = new SqliteConnection(connectionString))
                 {
                     connection.Open();
                     using (var cmd = connection.CreateCommand())
                     {
+<<<<<<< Updated upstream
                         cmd.CommandText = @"
                             SELECT tipo, monto, timestamp, cajero_id 
                             FROM Movimientos_Caja 
@@ -727,12 +832,123 @@ namespace CajaAmet
             if (result != DialogResult.Yes) return;
 
             string timestampStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+=======
+                        if (string.IsNullOrEmpty(queryText))
+                        {
+                            cmd.CommandText = @"
+                                SELECT id, conductor_cedula, conductor_nombre, tipo_infraccion_desc, monto_base, placa, fecha_hecho 
+                                FROM Borradores_Actas 
+                                WHERE estado_sync = 'PENDIENTE'
+                                ORDER BY fecha_hecho DESC;";
+                        }
+                        else
+                        {
+                            cmd.CommandText = @"
+                                SELECT id, conductor_cedula, conductor_nombre, tipo_infraccion_desc, monto_base, placa, fecha_hecho 
+                                FROM Borradores_Actas 
+                                WHERE estado_sync = 'PENDIENTE' 
+                                  AND (conductor_cedula LIKE @q OR placa LIKE @q OR conductor_nombre LIKE @q)
+                                ORDER BY fecha_hecho DESC;";
+                            cmd.Parameters.AddWithValue("@q", $"%{queryText}%");
+                        }
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            dt.Load(reader);
+                        }
+                    }
+                }
+
+                dgvActas.DataSource = dt;
+                lblResultados.Text = $"Se encontraron {dt.Rows.Count} actas pendientes.";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar actas: {ex.Message}", "Error de Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            CargarActasPendientes(txtBuscar.Text.Trim());
+            LimpiarSeleccion();
+        }
+
+        private void dgvActas_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvActas.SelectedRows.Count > 0)
+            {
+                var row = dgvActas.SelectedRows[0];
+                selectedActaUuid = row.Cells["colId"].Value?.ToString();
+                selectedConductor = row.Cells["colNombre"].Value?.ToString();
+                
+                if (double.TryParse(row.Cells["colMonto"].Value?.ToString(), out double m))
+                {
+                    selectedMonto = m;
+                }
+                else
+                {
+                    selectedMonto = 0.0;
+                }
+
+                lblSelectedActa.Text = $"Acta UUID: {selectedActaUuid.Substring(0, 8)}...";
+                lblSelectedConductor.Text = $"Conductor: {selectedConductor}";
+                lblSelectedMonto.Text = $"Monto a Pagar: RD$ {selectedMonto:N2}";
+                btnPagar.Enabled = true;
+                txtDescPago.Enabled = true;
+            }
+            else
+            {
+                LimpiarSeleccion();
+            }
+        }
+
+        private void LimpiarSeleccion()
+        {
+            selectedActaUuid = null;
+            selectedMonto = 0.0;
+            selectedConductor = "";
+
+            lblSelectedActa.Text = "Acta UUID: Seleccione una multa";
+            lblSelectedConductor.Text = "Conductor: -";
+            lblSelectedMonto.Text = "Monto a Pagar: RD$ 0.00";
+            btnPagar.Enabled = false;
+            txtDescPago.Enabled = false;
+            txtDescPago.Clear();
+        }
+
+        private void btnPagar_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(selectedActaUuid))
+            {
+                MessageBox.Show("Por favor, seleccione un acta de la lista.", "Selección Requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DialogResult confirm = MessageBox.Show(
+                $"¿Confirmar cobro de RD$ {selectedMonto:N2} para el conductor {selectedConductor}?", 
+                "Confirmar Transacción", 
+                MessageBoxButtons.YesNo, 
+                MessageBoxIcon.Question
+            );
+
+            if (confirm != DialogResult.Yes)
+            {
+                return;
+            }
+
+            string timestamp = DateTime.Now.ToString("o");
+            string descripcionPago = string.IsNullOrEmpty(txtDescPago.Text.Trim()) 
+                ? $"Cobro de multa por acta {selectedActaUuid.Substring(0, 8)}" 
+                : txtDescPago.Text.Trim();
+>>>>>>> Stashed changes
 
             try
             {
                 using (var connection = new SqliteConnection(connectionString))
                 {
                     connection.Open();
+<<<<<<< Updated upstream
                     using (var cmd = connection.CreateCommand())
                     {
                         cmd.CommandText = @"
@@ -755,5 +971,83 @@ namespace CajaAmet
                 MessageBox.Show($"Error al registrar el cierre en la base de datos: {ex.Message}", "Error de BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+=======
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // 1. Insertar el movimiento en Movimientos_Caja
+                            using (var cmd = connection.CreateCommand())
+                            {
+                                cmd.Transaction = transaction;
+                                cmd.CommandText = @"
+                                    INSERT INTO Movimientos_Caja (tipo, monto, descripcion, acta_uuid, cajero_id, timestamp)
+                                    VALUES ('ENTRADA', @monto, @desc, @actaUuid, @cajeroId, @timestamp);";
+
+                                cmd.Parameters.AddWithValue("@monto", selectedMonto);
+                                cmd.Parameters.AddWithValue("@desc", descripcionPago);
+                                cmd.Parameters.AddWithValue("@actaUuid", selectedActaUuid);
+                                cmd.Parameters.AddWithValue("@cajeroId", cashierId);
+                                cmd.Parameters.AddWithValue("@timestamp", timestamp);
+
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            // 2. Marcar el acta como pagada
+                            using (var cmd = connection.CreateCommand())
+                            {
+                                cmd.Transaction = transaction;
+                                cmd.CommandText = @"
+                                    UPDATE Borradores_Actas 
+                                    SET estado_sync = 'PAGADO' 
+                                    WHERE id = @actaUuid;";
+
+                                cmd.Parameters.AddWithValue("@actaUuid", selectedActaUuid);
+
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            transaction.Commit();
+                        }
+                        catch
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    $"¡Pago Procesado Exitosamente!\r\n\r\n" +
+                    $"Ticket Oficial de Recibo:\r\n" +
+                    $"==================================\r\n" +
+                    $"Recibo de Caja: DIGESETT-RC-{DateTime.Now.Ticks.ToString().Substring(10)}\r\n" +
+                    $"Conductor: {selectedConductor}\r\n" +
+                    $"Monto Cobrado: RD$ {selectedMonto:N2}\r\n" +
+                    $"Concepto: {descripcionPago}\r\n" +
+                    $"Cajero: {cashierId}\r\n" +
+                    $"Fecha/Hora: {DateTime.Now.ToString("G")}\r\n" +
+                    $"==================================\r\n" +
+                    $"\r\n¡Transacción registrada y base de datos local actualizada!", 
+                    "Recibo de Pago de Caja", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Information
+                );
+
+                // Recargar lista y limpiar selección
+                CargarActasPendientes(txtBuscar.Text.Trim());
+                LimpiarSeleccion();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al procesar el pago: {ex.Message}", "Error de Transacción", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+>>>>>>> Stashed changes
     }
 }

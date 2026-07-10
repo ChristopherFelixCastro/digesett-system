@@ -3,6 +3,7 @@ namespace CajaAmet
     partial class CajaForm
     {
         private System.ComponentModel.IContainer components = null;
+<<<<<<< Updated upstream
 
         // Sidebar
         private System.Windows.Forms.Panel pnlSidebar;
@@ -93,6 +94,26 @@ namespace CajaAmet
         private System.Windows.Forms.Label lblCierreDiferencia;
         private System.Windows.Forms.Label lblCierreDiferenciaValor;
         private System.Windows.Forms.Button btnCerrarCaja;
+=======
+        private System.Windows.Forms.Panel pnlHeader;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblSubtitle;
+        private System.Windows.Forms.Panel pnlAccent;
+        private System.Windows.Forms.Label lblBuscar;
+        private System.Windows.Forms.TextBox txtBuscar;
+        private System.Windows.Forms.Button btnBuscar;
+        private System.Windows.Forms.DataGridView dgvActas;
+        private System.Windows.Forms.Label lblResultados;
+        private System.Windows.Forms.GroupBox gbCobro;
+        private System.Windows.Forms.Label lblSelectedActa;
+        private System.Windows.Forms.Label lblSelectedConductor;
+        private System.Windows.Forms.Label lblSelectedMonto;
+        private System.Windows.Forms.Label lblDescPago;
+        private System.Windows.Forms.TextBox txtDescPago;
+        private System.Windows.Forms.Button btnPagar;
+        private System.Windows.Forms.Button btnVolver;
+        private System.Windows.Forms.Label lblCajero;
+>>>>>>> Stashed changes
 
         protected override void Dispose(bool disposing)
         {
@@ -105,6 +126,7 @@ namespace CajaAmet
 
         private void InitializeComponent()
         {
+<<<<<<< Updated upstream
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.lblSidebarTitle = new System.Windows.Forms.Label();
             this.lblSidebarSubtitle = new System.Windows.Forms.Label();
@@ -1195,20 +1217,312 @@ namespace CajaAmet
             this.btnCerrarCaja.UseVisualStyleBackColor = false;
             this.btnCerrarCaja.Click += new System.EventHandler(this.btnCerrarCaja_Click);
             
+=======
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.lblSubtitle = new System.Windows.Forms.Label();
+            this.pnlAccent = new System.Windows.Forms.Panel();
+            this.lblBuscar = new System.Windows.Forms.Label();
+            this.txtBuscar = new System.Windows.Forms.TextBox();
+            this.btnBuscar = new System.Windows.Forms.Button();
+            this.dgvActas = new System.Windows.Forms.DataGridView();
+            this.lblResultados = new System.Windows.Forms.Label();
+            this.gbCobro = new System.Windows.Forms.GroupBox();
+            this.lblSelectedActa = new System.Windows.Forms.Label();
+            this.lblSelectedConductor = new System.Windows.Forms.Label();
+            this.lblSelectedMonto = new System.Windows.Forms.Label();
+            this.lblDescPago = new System.Windows.Forms.Label();
+            this.txtDescPago = new System.Windows.Forms.TextBox();
+            this.btnPagar = new System.Windows.Forms.Button();
+            this.btnVolver = new System.Windows.Forms.Button();
+            this.lblCajero = new System.Windows.Forms.Label();
+            this.pnlHeader.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvActas)).BeginInit();
+            this.gbCobro.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // pnlHeader
+            // 
+            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(15, 118, 110);
+            this.pnlHeader.Controls.Add(this.lblTitle);
+            this.pnlHeader.Controls.Add(this.lblSubtitle);
+            this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlHeader.Location = new System.Drawing.Point(0, 0);
+            this.pnlHeader.Name = "pnlHeader";
+            this.pnlHeader.Size = new System.Drawing.Size(784, 75);
+            this.pnlHeader.TabIndex = 0;
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 13.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.White;
+            this.lblTitle.Location = new System.Drawing.Point(16, 12);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(271, 25);
+            this.lblTitle.TabIndex = 0;
+            this.lblTitle.Text = "ADMINISTRACIÓN - MODO CAJA";
+            // 
+            // lblSubtitle
+            // 
+            this.lblSubtitle.AutoSize = true;
+            this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(204, 251, 241);
+            this.lblSubtitle.Location = new System.Drawing.Point(18, 40);
+            this.lblSubtitle.Name = "lblSubtitle";
+            this.lblSubtitle.Size = new System.Drawing.Size(306, 15);
+            this.lblSubtitle.TabIndex = 1;
+            this.lblSubtitle.Text = "Cobros de Actas de Infracción y Control de Caja en Ventanilla";
+            // 
+            // pnlAccent
+            // 
+            this.pnlAccent.BackColor = System.Drawing.Color.FromArgb(13, 148, 136);
+            this.pnlAccent.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlAccent.Location = new System.Drawing.Point(0, 75);
+            this.pnlAccent.Name = "pnlAccent";
+            this.pnlAccent.Size = new System.Drawing.Size(784, 4);
+            this.pnlAccent.TabIndex = 1;
+            // 
+            // lblBuscar
+            // 
+            this.lblBuscar.AutoSize = true;
+            this.lblBuscar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBuscar.ForeColor = System.Drawing.Color.FromArgb(220, 252, 231);
+            this.lblBuscar.Location = new System.Drawing.Point(18, 92);
+            this.lblBuscar.Name = "lblBuscar";
+            this.lblBuscar.Size = new System.Drawing.Size(185, 15);
+            this.lblBuscar.TabIndex = 2;
+            this.lblBuscar.Text = "Buscar por Cédula, Placa o Nombre:";
+            // 
+            // txtBuscar
+            // 
+            this.txtBuscar.BackColor = System.Drawing.Color.FromArgb(26, 58, 29);
+            this.txtBuscar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtBuscar.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBuscar.ForeColor = System.Drawing.Color.White;
+            this.txtBuscar.Location = new System.Drawing.Point(21, 110);
+            this.txtBuscar.Name = "txtBuscar";
+            this.txtBuscar.Size = new System.Drawing.Size(350, 24);
+            this.txtBuscar.TabIndex = 3;
+            // 
+            // btnBuscar
+            // 
+            this.btnBuscar.BackColor = System.Drawing.Color.FromArgb(15, 118, 110);
+            this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBuscar.FlatAppearance.BorderSize = 0;
+            this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBuscar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBuscar.ForeColor = System.Drawing.Color.White;
+            this.btnBuscar.Location = new System.Drawing.Point(385, 108);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(90, 26);
+            this.btnBuscar.TabIndex = 4;
+            this.btnBuscar.Text = "🔍 Buscar";
+            this.btnBuscar.UseVisualStyleBackColor = false;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
+            // 
+            // dgvActas
+            // 
+            this.dgvActas.AllowUserToAddRows = false;
+            this.dgvActas.AllowUserToDeleteRows = false;
+            this.dgvActas.AllowUserToResizeRows = false;
+            this.dgvActas.BackgroundColor = System.Drawing.Color.FromArgb(26, 58, 29);
+            this.dgvActas.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvActas.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgvActas.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(15, 118, 110);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(15, 118, 110);
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvActas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvActas.ColumnHeadersHeight = 30;
+            this.dgvActas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(26, 58, 29);
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(22, 101, 52);
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvActas.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvActas.EnableHeadersVisualStyles = false;
+            this.dgvActas.GridColor = System.Drawing.Color.FromArgb(13, 31, 15);
+            this.dgvActas.Location = new System.Drawing.Point(21, 160);
+            this.dgvActas.MultiSelect = false;
+            this.dgvActas.Name = "dgvActas";
+            this.dgvActas.ReadOnly = true;
+            this.dgvActas.RowHeadersVisible = false;
+            this.dgvActas.RowTemplate.Height = 28;
+            this.dgvActas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvActas.Size = new System.Drawing.Size(454, 300);
+            this.dgvActas.TabIndex = 5;
+            this.dgvActas.SelectionChanged += new System.EventHandler(this.dgvActas_SelectionChanged);
+            // 
+            // lblResultados
+            // 
+            this.lblResultados.AutoSize = true;
+            this.lblResultados.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblResultados.ForeColor = System.Drawing.Color.FromArgb(148, 163, 184);
+            this.lblResultados.Location = new System.Drawing.Point(18, 470);
+            this.lblResultados.Name = "lblResultados";
+            this.lblResultados.Size = new System.Drawing.Size(133, 15);
+            this.lblResultados.TabIndex = 6;
+            this.lblResultados.Text = "Esperando búsqueda...";
+            // 
+            // gbCobro
+            // 
+            this.gbCobro.Controls.Add(this.lblSelectedActa);
+            this.gbCobro.Controls.Add(this.lblSelectedConductor);
+            this.gbCobro.Controls.Add(this.lblSelectedMonto);
+            this.gbCobro.Controls.Add(this.lblDescPago);
+            this.gbCobro.Controls.Add(this.txtDescPago);
+            this.gbCobro.Controls.Add(this.btnPagar);
+            this.gbCobro.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbCobro.ForeColor = System.Drawing.Color.FromArgb(220, 252, 231);
+            this.gbCobro.Location = new System.Drawing.Point(495, 110);
+            this.gbCobro.Name = "gbCobro";
+            this.gbCobro.Size = new System.Drawing.Size(265, 350);
+            this.gbCobro.TabIndex = 7;
+            this.gbCobro.TabStop = false;
+            this.gbCobro.Text = "Detalles de Cobro";
+            // 
+            // lblSelectedActa
+            // 
+            this.lblSelectedActa.AutoSize = true;
+            this.lblSelectedActa.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSelectedActa.ForeColor = System.Drawing.Color.FromArgb(204, 251, 241);
+            this.lblSelectedActa.Location = new System.Drawing.Point(18, 40);
+            this.lblSelectedActa.Name = "lblSelectedActa";
+            this.lblSelectedActa.Size = new System.Drawing.Size(167, 15);
+            this.lblSelectedActa.TabIndex = 0;
+            this.lblSelectedActa.Text = "Acta UUID: Seleccione una multa";
+            // 
+            // lblSelectedConductor
+            // 
+            this.lblSelectedConductor.AutoSize = true;
+            this.lblSelectedConductor.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSelectedConductor.ForeColor = System.Drawing.Color.White;
+            this.lblSelectedConductor.Location = new System.Drawing.Point(18, 70);
+            this.lblSelectedConductor.Name = "lblSelectedConductor";
+            this.lblSelectedConductor.Size = new System.Drawing.Size(89, 17);
+            this.lblSelectedConductor.TabIndex = 1;
+            this.lblSelectedConductor.Text = "Conductor: -";
+            // 
+            // lblSelectedMonto
+            // 
+            this.lblSelectedMonto.AutoSize = true;
+            this.lblSelectedMonto.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSelectedMonto.ForeColor = System.Drawing.Color.FromArgb(74, 222, 128);
+            this.lblSelectedMonto.Location = new System.Drawing.Point(17, 105);
+            this.lblSelectedMonto.Name = "lblSelectedMonto";
+            this.lblSelectedMonto.Size = new System.Drawing.Size(199, 21);
+            this.lblSelectedMonto.TabIndex = 2;
+            this.lblSelectedMonto.Text = "Monto a Pagar: RD$ 0.00";
+            // 
+            // lblDescPago
+            // 
+            this.lblDescPago.AutoSize = true;
+            this.lblDescPago.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDescPago.ForeColor = System.Drawing.Color.FromArgb(220, 252, 231);
+            this.lblDescPago.Location = new System.Drawing.Point(18, 160);
+            this.lblDescPago.Name = "lblDescPago";
+            this.lblDescPago.Size = new System.Drawing.Size(124, 15);
+            this.lblDescPago.TabIndex = 3;
+            this.lblDescPago.Text = "Descripción del Pago:";
+            // 
+            // txtDescPago
+            // 
+            this.txtDescPago.BackColor = System.Drawing.Color.FromArgb(26, 58, 29);
+            this.txtDescPago.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDescPago.Enabled = false;
+            this.txtDescPago.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDescPago.ForeColor = System.Drawing.Color.White;
+            this.txtDescPago.Location = new System.Drawing.Point(21, 180);
+            this.txtDescPago.Multiline = true;
+            this.txtDescPago.Name = "txtDescPago";
+            this.txtDescPago.Size = new System.Drawing.Size(225, 70);
+            this.txtDescPago.TabIndex = 4;
+            // 
+            // btnPagar
+            // 
+            this.btnPagar.BackColor = System.Drawing.Color.FromArgb(21, 128, 61);
+            this.btnPagar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPagar.Enabled = false;
+            this.btnPagar.FlatAppearance.BorderSize = 0;
+            this.btnPagar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.btnPagar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(22, 163, 74);
+            this.btnPagar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPagar.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPagar.ForeColor = System.Drawing.Color.White;
+            this.btnPagar.Location = new System.Drawing.Point(21, 280);
+            this.btnPagar.Name = "btnPagar";
+            this.btnPagar.Size = new System.Drawing.Size(225, 45);
+            this.btnPagar.TabIndex = 5;
+            this.btnPagar.Text = "💳 Registrar Cobro / Pago";
+            this.btnPagar.UseVisualStyleBackColor = false;
+            this.btnPagar.Click += new System.EventHandler(this.btnPagar_Click);
+            // 
+            // btnVolver
+            // 
+            this.btnVolver.BackColor = System.Drawing.Color.FromArgb(71, 85, 105);
+            this.btnVolver.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnVolver.FlatAppearance.BorderSize = 0;
+            this.btnVolver.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVolver.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVolver.ForeColor = System.Drawing.Color.White;
+            this.btnVolver.Location = new System.Drawing.Point(628, 470);
+            this.btnVolver.Name = "btnVolver";
+            this.btnVolver.Size = new System.Drawing.Size(132, 30);
+            this.btnVolver.TabIndex = 8;
+            this.btnVolver.Text = "Volver";
+            this.btnVolver.UseVisualStyleBackColor = false;
+            this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
+            // 
+            // lblCajero
+            // 
+            this.lblCajero.AutoSize = true;
+            this.lblCajero.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCajero.ForeColor = System.Drawing.Color.FromArgb(148, 163, 184);
+            this.lblCajero.Location = new System.Drawing.Point(495, 477);
+            this.lblCajero.Name = "lblCajero";
+            this.lblCajero.Size = new System.Drawing.Size(107, 15);
+            this.lblCajero.TabIndex = 9;
+            this.lblCajero.Text = "Cajero ID: Ninguno";
+>>>>>>> Stashed changes
             // 
             // CajaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(13, 31, 15);
+<<<<<<< Updated upstream
             this.ClientSize = new System.Drawing.Size(800, 600);
             this.Controls.Add(this.pnlSidebarAccent);
             this.Controls.Add(this.pnlContentContainer);
             this.Controls.Add(this.pnlSidebar);
+=======
+            this.ClientSize = new System.Drawing.Size(784, 511);
+            this.Controls.Add(this.lblCajero);
+            this.Controls.Add(this.btnVolver);
+            this.Controls.Add(this.gbCobro);
+            this.Controls.Add(this.lblResultados);
+            this.Controls.Add(this.dgvActas);
+            this.Controls.Add(this.btnBuscar);
+            this.Controls.Add(this.txtBuscar);
+            this.Controls.Add(this.lblBuscar);
+            this.Controls.Add(this.pnlAccent);
+            this.Controls.Add(this.pnlHeader);
+>>>>>>> Stashed changes
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "CajaForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+<<<<<<< Updated upstream
             this.Text = "DIGESETT — Módulo de Caja (Ventanilla)";
             this.Load += new System.EventHandler(this.CajaForm_Load);
             this.pnlSidebar.ResumeLayout(false);
@@ -1227,6 +1541,17 @@ namespace CajaAmet
             this.pnlCierre.ResumeLayout(false);
             this.pnlCierre.PerformLayout();
             this.ResumeLayout(false);
+=======
+            this.Text = "DIGESETT — Caja Mode";
+            this.Load += new System.EventHandler(this.CajaForm_Load);
+            this.pnlHeader.ResumeLayout(false);
+            this.pnlHeader.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvActas)).EndInit();
+            this.gbCobro.ResumeLayout(false);
+            this.gbCobro.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+>>>>>>> Stashed changes
 
         }
     }

@@ -1,0 +1,10 @@
+=== INICIANDO PRUEBA DE CONCEPTO (PoC) SQLCIPHER ===
+1. Derivando clave con PBKDF2 (100,000 iteraciones + SHA-256 + MAC Salt)...
+   Clave derivada (Hex truncated): 1F591411...
+2. Ruta de la BD: C:\Users\angel\AppData\Roaming\Digesett\actas_local.db
+3. Abriendo base de datos e inicializando tablas...
+
+[ERROR PoC]: The type initializer for 'Microsoft.Data.Sqlite.SqliteConnection' threw an exception.
+   at Microsoft.Data.Sqlite.SqliteConnection..ctor(String connectionString)
+   at CajaAmet.DatabaseManager.InicializarBD(String connectionString) in C:\Users\angel\OneDrive\Documentos\GitHub\digesett-system\caja\CajaAmet\CajaAmet\DatabaseManager.cs:line 62
+   at CajaAmet.DatabaseManager.EjecutarPoC(String password, String& log) in C:\Users\angel\OneDrive\Documentos\GitHub\digesett-system\caja\CajaAmet\CajaAmet\DatabaseManager.cs:line 143
