@@ -211,7 +211,7 @@
         }
       }
     },
-    "net48/win-x64": {
+    "net48/win-x86": {
       "Microsoft.Data.Sqlite.Core/8.0.8": {
         "type": "package",
         "dependencies": {
@@ -262,7 +262,7 @@
           "lib/net461/_._": {}
         },
         "native": {
-          "runtimes/win-x64/native/e_sqlcipher.dll": {}
+          "runtimes/win-x86/native/e_sqlcipher.dll": {}
         },
         "build": {
           "buildTransitive/net461/SQLitePCLRaw.lib.e_sqlcipher.targets": {}
@@ -636,9 +636,17 @@
       }
     },
     "runtimes": {
-      "win-x64": {
+      "win-x86": {
         "#import": []
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problema al leer el archivo de caché C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\CajaAmet\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
+    }
+  ]
 }

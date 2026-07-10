@@ -1,10 +1,6 @@
 {
   "version": 2,
-<<<<<<< Updated upstream
   "dgSpecHash": "J4IVgiGOjvs=",
-=======
-  "dgSpecHash": "05tFgAOyFqc=",
->>>>>>> Stashed changes
   "success": true,
   "projectFilePath": "C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\CajaAmet\\CajaAmet.csproj",
   "expectedPackageFiles": [
@@ -18,5 +14,15 @@
     "C:\\Users\\angel\\.nuget\\packages\\system.numerics.vectors\\4.4.0\\system.numerics.vectors.4.4.0.nupkg.sha512",
     "C:\\Users\\angel\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.2\\system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problema al leer el archivo de caché C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\CajaAmet\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\CajaAmet\\CajaAmet.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\CajaAmet\\CajaAmet.csproj",
+      "targetGraphs": []
+    }
+  ]
 }
