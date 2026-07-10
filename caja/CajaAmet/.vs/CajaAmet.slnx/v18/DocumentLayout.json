@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{ED018F29-9398-B863-9348-2241E0847CF6}|CajaAmet\\CajaAmet.csproj|c:\\users\\angel\\onedrive\\documentos\\github\\digesett-system\\caja\\cajaamet\\cajaamet\\databasemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{ED018F29-9398-B863-9348-2241E0847CF6}|CajaAmet\\CajaAmet.csproj|solutionrelative:cajaamet\\databasemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\CajaAmet\\DatabaseManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CajaAmet\\DatabaseManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -28,13 +28,9 @@
               "RelativeDocumentMoniker": "CajaAmet\\DatabaseManager.cs",
               "ToolTip": "C:\\Users\\angel\\OneDrive\\Documentos\\GitHub\\digesett-system\\caja\\CajaAmet\\CajaAmet\\DatabaseManager.cs",
               "RelativeToolTip": "CajaAmet\\DatabaseManager.cs",
-<<<<<<< Updated upstream
               "ViewState": "AgIAAI4AAAAAAAAAAAAAAMAAAAAzAAAAAAAAAA==",
-=======
-              "ViewState": "AgIAAJIAAAAAAAAAAAAAAJ4AAAAzAAAAAAAAAA==",
->>>>>>> Stashed changes
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-19T00:36:02.169Z",
+              "WhenOpened": "2026-07-10T23:39:35.235Z",
               "EditorCaption": ""
             }
           ]
