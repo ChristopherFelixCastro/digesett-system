@@ -170,6 +170,7 @@ export default function LoginPage() {
           🔑 (la contraseña del seed)
         </div>
 
+        
       </div>
     </div>
   );

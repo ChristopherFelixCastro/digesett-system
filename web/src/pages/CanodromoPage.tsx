@@ -1,43 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axiosClient from '../api/axiosClient';
 import LoadingSpinner from '../components/LoadingSpinner';
-import ErrorMessage   from '../components/ErrorMessage';
+import ErrorMessage from '../components/ErrorMessage';
 
 interface VehiculoRetenido {
-  placa:          string;
-  marca:          string;
-  modelo:         string;
-  estado:         string;
-  fecha_ingreso:  string;
-  dias_retenido:  number;
-  costo_estadia:  number;
+  id:           number;
+  actaId:       string;
+  placa:        string;
+  fechaIngreso: string;
+  fechaSalida:  string | null;
+  diasCobrados: number;
+  costoTotal:   number;
+  estado:       string;
 }
 
-// TODO: reemplazar con datos reales del endpoint GET /api/v1/canodromos/{placa}
-const DATOS_MOCK: Record<string, VehiculoRetenido> = {
-  'A123456': {
-    placa:         'A123456',
-    marca:         'Toyota',
-    modelo:        'Corolla',
-    estado:        'RETENIDO',
-    fecha_ingreso: '2025-08-01',
-    dias_retenido: 15,
-    costo_estadia: 3000.00,
-  },
-  'B789012': {
-    placa:         'B789012',
-    marca:         'Honda',
-    modelo:        'Civic',
-    estado:        'APTO_PARA_LIBERACION',
-    fecha_ingreso: '2025-07-20',
-    dias_retenido: 27,
-    costo_estadia: 5400.00,
-  },
-};
-
 const colorEstado: Record<string, string> = {
-  RETENIDO:              '#FEE2E2',
-  APTO_PARA_LIBERACION:  '#FEF3C7',
-  LIBERADO:              '#DCFCE7',
+  RETENIDO:             '#FEE2E2',
+  APTO_PARA_LIBERACION: '#FEF3C7',
+  LIBERADO:             '#DCFCE7',
 };
 
 const textoEstado: Record<string, string> = {
@@ -47,43 +27,66 @@ const textoEstado: Record<string, string> = {
 };
 
 export default function CanodromoPage() {
-  const [busqueda,  setBusqueda]  = useState('');
-  const [loading,   setLoading]   = useState(false);
-  const [error,     setError]     = useState<number | null>(null);
-  const [resultado, setResultado] = useState<VehiculoRetenido | null>(null);
+  const [busqueda,     setBusqueda]     = useState('');
+  const [todos,        setTodos]        = useState<VehiculoRetenido[]>([]);
+  const [resultado,    setResultado]    = useState<VehiculoRetenido | null>(null);
   const [noEncontrado, setNoEncontrado] = useState(false);
+  const [loading,      setLoading]      = useState(false);
+  const [error,        setError]        = useState<number | null>(null);
+  const [cargando,     setCargando]     = useState(true);
 
-  const buscar = async () => {
+  // Cargar todos los vehículos al montar el componente
+  useEffect(() => {
+    cargarTodos();
+  }, []);
+
+  const cargarTodos = async () => {
+    setCargando(true);
+    setError(null);
+    try {
+      const { data } = await axiosClient.get('/api/v1/canodromos');
+      setTodos(Array.isArray(data) ? data : []);
+    } catch (err: any) {
+      setError(err.response?.status ?? 0);
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const buscar = () => {
     if (!busqueda.trim()) return;
     setLoading(true);
-    setError(null);
     setResultado(null);
     setNoEncontrado(false);
 
-    // Simular delay de red
-    await new Promise(r => setTimeout(r, 600));
+    // Filtrar localmente por placa
+    const encontrado = todos.find(
+      v => v.placa.toUpperCase() === busqueda.toUpperCase().trim()
+    );
 
-    // TODO: reemplazar con llamada real:
-    // const { data } = await axiosClient.get(`/api/v1/canodromos/${busqueda}`);
-    const encontrado = DATOS_MOCK[busqueda.toUpperCase()];
-
-    if (encontrado) {
-      setResultado(encontrado);
-    } else {
-      setNoEncontrado(true);
-    }
-
-    setLoading(false);
+    setTimeout(() => {
+      if (encontrado) {
+        setResultado(encontrado);
+      } else {
+        setNoEncontrado(true);
+      }
+      setLoading(false);
+    }, 400);
   };
 
   return (
     <div style={{ maxWidth: '600px', margin: '3rem auto', padding: '0 1rem' }}>
-      <h1 style={{ fontSize: '1.5rem', marginBottom: '.5rem' }}>
+      <h1 style={{ fontSize: '1.5rem', marginBottom: '.5rem', fontWeight: 800, color: '#0F172A' }}>
         Consulta de Vehículos en el Canódromo
       </h1>
       <p style={{ color: '#64748B', marginBottom: '1.5rem', fontSize: '.9rem' }}>
-        Verifica si tu vehículo está retenido ingresando la placa o número de chasis.
+        Verifica si tu vehículo está retenido ingresando la placa.
       </p>
+
+      {/* Error cargando todos */}
+      {error && !cargando && (
+        <ErrorMessage status={error} onRetry={cargarTodos} />
+      )}
 
       {/* Input de búsqueda */}
       <div style={{ display: 'flex', gap: '.5rem', marginBottom: '1.5rem' }}>
@@ -91,29 +94,33 @@ export default function CanodromoPage() {
           value={busqueda}
           onChange={e => setBusqueda(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && buscar()}
-          placeholder="Ej: A123456"
+          placeholder="Ej: A234567"
+          disabled={cargando}
           style={{
             flex: 1, padding: '.6rem 1rem',
-            border: '1px solid #d1d5db', borderRadius: '6px',
+            border: '1px solid #D1D5DB', borderRadius: '6px',
             fontSize: '.9rem'
           }}
         />
         <button
           onClick={buscar}
-          disabled={loading}
+          disabled={cargando || loading}
           style={{
-            padding: '.6rem 1.25rem', background: '#ea580c',
+            padding: '.6rem 1.25rem',
+            background: cargando ? '#93B9E0' : '#0F539C',
             color: 'white', border: 'none', borderRadius: '6px',
-            cursor: 'pointer', fontWeight: 600
+            cursor: cargando ? 'not-allowed' : 'pointer', fontWeight: 600
           }}
         >
-          Buscar
+          {cargando ? 'Cargando...' : 'Buscar'}
         </button>
       </div>
 
-      {/* Estados */}
-      {loading && <LoadingSpinner />}
-      {error   && <ErrorMessage status={error} onRetry={buscar} />}
+      {/* Cargando datos iniciales */}
+      {cargando && <LoadingSpinner />}
+
+      {/* Spinner de búsqueda */}
+      {loading && !cargando && <LoadingSpinner />}
 
       {/* No encontrado */}
       {noEncontrado && !loading && (
@@ -122,73 +129,88 @@ export default function CanodromoPage() {
           borderRadius: '8px', padding: '1.25rem',
           color: '#15803D', fontSize: '.9rem'
         }}>
-          ✅ El vehículo <strong>{busqueda.toUpperCase()}</strong> no se encuentra
-          retenido en el Canódromo.
+          ✅ El vehículo con placa <strong>{busqueda.toUpperCase()}</strong> no
+          se encuentra retenido en el Canódromo.
         </div>
       )}
 
       {/* Resultado */}
       {resultado && !loading && (
         <div style={{
-          border: '1px solid #e2e8f0', borderRadius: '8px',
-          overflow: 'hidden', background: 'white'
+          border: '1px solid #E2E8F0', borderRadius: '10px',
+          overflow: 'hidden', background: 'white',
+          boxShadow: '0 1px 4px rgba(0,0,0,.06)'
         }}>
           {/* Header con estado */}
           <div style={{
             background: colorEstado[resultado.estado] ?? '#F1F5F9',
             padding: '.85rem 1.25rem',
-            borderBottom: '1px solid #e2e8f0',
-            fontWeight: 600, fontSize: '.9rem'
+            borderBottom: '1px solid #E2E8F0',
+            fontWeight: 700, fontSize: '.9rem'
           }}>
             {textoEstado[resultado.estado] ?? resultado.estado}
           </div>
 
-          {/* Datos */}
+          {/* Datos del vehículo */}
           <div style={{ padding: '1.25rem' }}>
-            <p><strong>Placa:</strong> {resultado.placa}</p>
-            <p><strong>Vehículo:</strong> {resultado.marca} {resultado.modelo}</p>
-            <p><strong>Fecha de Ingreso:</strong> {new Date(resultado.fecha_ingreso).toLocaleDateString('es-DO')}</p>
-            <p><strong>Días Retenido:</strong> {resultado.dias_retenido} días</p>
+            {[
+              { label: 'Placa',           valor: resultado.placa },
+              { label: 'Fecha de Ingreso', valor: new Date(resultado.fechaIngreso).toLocaleDateString('es-DO', { year: 'numeric', month: 'long', day: 'numeric' }) },
+              { label: 'Días Retenido',   valor: `${resultado.diasCobrados} días` },
+            ].map(item => (
+              <div key={item.label} style={{
+                display: 'flex', justifyContent: 'space-between',
+                padding: '.6rem 0', borderBottom: '1px solid #F1F5F9',
+                fontSize: '.88rem'
+              }}>
+                <span style={{ color: '#64748B' }}>{item.label}</span>
+                <span style={{ fontWeight: 600, color: '#0F172A' }}>{item.valor}</span>
+              </div>
+            ))}
 
-            <hr style={{ margin: '1rem 0', border: 'none', borderTop: '1px solid #e2e8f0' }} />
-
+            {/* Costo de estadía */}
             <div style={{
+              marginTop: '1rem',
               background: '#FFF7ED', border: '1px solid #FED7AA',
-              borderRadius: '6px', padding: '.85rem 1rem'
+              borderRadius: '8px', padding: '1rem'
             }}>
-              <p style={{ margin: 0, fontWeight: 600, color: '#C2410C' }}>
+              <div style={{ fontSize: '.75rem', fontWeight: 700, color: '#92400E', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '.4rem' }}>
                 💰 Costo de Estadía Acumulado
-              </p>
-              <p style={{ margin: '.25rem 0 0', fontSize: '1.2rem', fontWeight: 700, color: '#ea580c' }}>
-                RD$ {resultado.costo_estadia.toLocaleString('es-DO', { minimumFractionDigits: 2 })}
-              </p>
-              <p style={{ margin: '.25rem 0 0', fontSize: '.78rem', color: '#92400E' }}>
-                RD$200.00 × {resultado.dias_retenido} días
-                {resultado.dias_retenido >= 60 && ' (tope máximo alcanzado)'}
-              </p>
+              </div>
+              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#EA580C' }}>
+                RD$ {resultado.costoTotal.toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+              </div>
+              <div style={{ fontSize: '.75rem', color: '#92400E', marginTop: '.25rem' }}>
+                RD$200.00 × {resultado.diasCobrados} días
+                {resultado.diasCobrados >= 60 && ' · (tope máximo de 60 días alcanzado)'}
+              </div>
             </div>
 
+            {/* Alerta si está listo para liberar */}
             {resultado.estado === 'APTO_PARA_LIBERACION' && (
               <div style={{
                 marginTop: '1rem', background: '#FEF3C7',
                 border: '1px solid #FDE68A', borderRadius: '6px',
                 padding: '.85rem 1rem', fontSize: '.85rem', color: '#92400E'
               }}>
-                ⚠️ Tu vehículo está listo para ser retirado. Dirígete al Canódromo
-                con el comprobante de pago de tu multa.
+                ⚠️ Tu vehículo está listo para ser retirado. Dirígete al
+                Canódromo con el comprobante de pago de tu multa.
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Nota de datos simulados */}
-      <p style={{
-        marginTop: '2rem', fontSize: '.75rem',
-        color: '#94A3B8', textAlign: 'center'
-      }}>
-        * Prueba con las placas: A123456 o B789012
-      </p>
+      {/* Total de vehículos retenidos */}
+      {!cargando && !error && todos.length > 0 && (
+        <p style={{
+          marginTop: '2rem', fontSize: '.75rem',
+          color: '#94A3B8', textAlign: 'center'
+        }}>
+          {todos.length} vehículo{todos.length !== 1 ? 's' : ''} actualmente
+          en el Canódromo
+        </p>
+      )}
     </div>
   );
 }
