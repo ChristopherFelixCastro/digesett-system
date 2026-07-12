@@ -25,11 +25,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     rol:       null,
   });
 
-  const login = (token: string, usuarioId: string, rol: string) => {
-    // Guardar en sessionStorage para que axiosClient lo pueda leer
-    sessionStorage.setItem('token', token);
-    setAuth({ token, usuarioId, rol });
-  };
+ const login = (token: string, usuarioId: string, rol: string) => {
+  sessionStorage.setItem('token', token);  // ← primero sessionStorage
+  setAuth({ token, usuarioId, rol });      // ← luego el estado
+};
 
   const logout = () => {
     // Limpiar sessionStorage al cerrar sesión

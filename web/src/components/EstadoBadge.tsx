@@ -1,28 +1,30 @@
 interface EstadoBadgeProps {
-  estado: 'EMITIDA' | 'PAGADA' | 'IMPUGNADA' | 'ANULADA' | string;
+  estado: string;
 }
 
-const estilos: Record<string, React.CSSProperties> = {
-  EMITIDA:   { background: '#FEE2E2', color: '#991B1B' },
-  PAGADA:    { background: '#DCFCE7', color: '#15803D' },
-  IMPUGNADA: { background: '#FEF3C7', color: '#92400E' },
-  ANULADA:   { background: '#F1F5F9', color: '#475569' },
+const estilos: Record<string, { bg: string; color: string; label: string }> = {
+  PENDIENTE:   { bg: '#FEE2E2', color: '#991B1B', label: '🔴 Pendiente'   },
+  EMITIDA:     { bg: '#FEE2E2', color: '#991B1B', label: '🔴 Emitida'     },
+  IMPUGNADA:   { bg: '#FEF3C7', color: '#92400E', label: '🟡 Impugnada'   },
+  PAGADA:      { bg: '#DCFCE7', color: '#15803D', label: '🟢 Pagada'      },
+  ANULADA:     { bg: '#F1F5F9', color: '#475569', label: '⚪ Anulada'     },
 };
 
 export default function EstadoBadge({ estado }: EstadoBadgeProps) {
-  const estilo = estilos[estado] ?? { background: '#F1F5F9', color: '#475569' };
+  const estilo = estilos[estado] ?? { bg: '#F1F5F9', color: '#475569', label: estado };
 
   return (
     <span style={{
-      ...estilo,
-      padding: '.2rem .65rem',
-      borderRadius: '20px',
-      fontSize: '.72rem',
-      fontWeight: 600,
-      letterSpacing: '.05em',
-      textTransform: 'uppercase',
+      background:    estilo.bg,
+      color:         estilo.color,
+      padding:       '.25rem .75rem',
+      borderRadius:  '20px',
+      fontSize:      '.72rem',
+      fontWeight:    600,
+      letterSpacing: '.04em',
+      whiteSpace:    'nowrap',
     }}>
-      {estado}
+      {estilo.label}
     </span>
   );
 }

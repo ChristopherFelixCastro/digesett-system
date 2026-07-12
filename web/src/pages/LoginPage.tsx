@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import axiosClient from '../api/axiosClient';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function LoginPage() {
@@ -9,8 +10,8 @@ export default function LoginPage() {
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState<string | null>(null);
 
-  const { login }  = useAuth();
-  const navigate   = useNavigate();
+  const { login } = useAuth();
+  const navigate  = useNavigate();
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
@@ -21,36 +22,32 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
-    // Simular delay de red
-    await new Promise(r => setTimeout(r, 800));
-
-    // TODO: reemplazar con llamada real a Yeimi:
-    // const { data } = await axiosClient.post('/api/v1/auth/login', { email, password });
-    // login(data.token, data.usuarioId, data.rol);
-
-    // Login simulado — acepta cualquier email y password válidos
-    if (email.includes('@') && password.length >= 4) {
-      const tokenFalso = btoa(JSON.stringify({
-        usuarioId: 'ciudadano-demo-001',
+    try {
+      const { data } = await axiosClient.post('/api/v1/auth/login', {
         email,
-        rol:       'Ciudadano',
-        exp:       Date.now() + 15 * 60 * 1000, // 15 minutos
-      }));
+        password
+      });
 
-      login(tokenFalso, 'ciudadano-demo-001', 'Ciudadano');
+      // Antony devuelve: { token, id, nombre, email, rol }
+      login(data.token, data.id, data.rol);
       navigate('/dashboard');
-    } else {
-      setError('Credenciales inválidas. Verifica tu email y contraseña.');
-    }
 
-    setLoading(false);
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        setError('Credenciales inválidas. Verifica tu email y contraseña.');
+      } else {
+        setError('No se pudo conectar con el servidor. Intenta de nuevo.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div style={{
-      minHeight: '100vh', display: 'flex',
+      minHeight: '80vh', display: 'flex',
       alignItems: 'center', justifyContent: 'center',
-      background: '#F7F9FC', padding: '1rem'
+      background: '#F5F7FA', padding: '1rem'
     }}>
       <div style={{
         background: 'white', border: '1px solid #E2E8F0',
@@ -61,14 +58,27 @@ export default function LoginPage() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{
+            width: '56px', height: '56px', borderRadius: '12px',
+            background: '#0F539C', display: 'flex',
+            alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto 1rem'
+          }}>
+            <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+              <path d="M18 4 L32 11 L32 25 C32 31 18 36 18 36 C18 36 4 31 4 25 L4 11 Z"
+                    fill="none" stroke="white" strokeWidth="2"/>
+              <text x="18" y="24" textAnchor="middle"
+                    fill="white" fontSize="11" fontWeight="700" fontFamily="serif">DG</text>
+            </svg>
+          </div>
           <h1 style={{
-            fontSize: '1.6rem', fontWeight: 800,
-            color: '#0F172A', marginBottom: '.4rem'
+            fontSize: '1.4rem', fontWeight: 800,
+            color: '#0F172A', marginBottom: '.3rem'
           }}>
             DIGESETT
           </h1>
-          <p style={{ color: '#64748B', fontSize: '.9rem' }}>
-            Portal Ciudadano — Inicia sesión para acceder a tu cuenta
+          <p style={{ color: '#64748B', fontSize: '.85rem' }}>
+            Inicia sesión para acceder a tu cuenta
           </p>
         </div>
 
@@ -80,19 +90,17 @@ export default function LoginPage() {
             color: '#991B1B', fontSize: '.85rem',
             marginBottom: '1.25rem'
           }}>
-            {error}
+            ⚠️ {error}
           </div>
         )}
 
         {/* Formulario */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
-          {/* Email */}
           <div>
             <label style={{
               display: 'block', fontSize: '.82rem',
-              fontWeight: 600, color: '#374151',
-              marginBottom: '.35rem'
+              fontWeight: 600, color: '#374151', marginBottom: '.35rem'
             }}>
               Correo Electrónico
             </label>
@@ -101,21 +109,20 @@ export default function LoginPage() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleLogin()}
-              placeholder="ciudadano@ejemplo.com"
+              placeholder="usuario@digesett.gob.do"
               style={{
                 width: '100%', padding: '.65rem 1rem',
                 border: '1px solid #D1D5DB', borderRadius: '6px',
-                fontSize: '.9rem', outline: 'none'
+                fontSize: '.9rem', outline: 'none',
+                transition: 'border-color .2s'
               }}
             />
           </div>
 
-          {/* Password */}
           <div>
             <label style={{
               display: 'block', fontSize: '.82rem',
-              fontWeight: 600, color: '#374151',
-              marginBottom: '.35rem'
+              fontWeight: 600, color: '#374151', marginBottom: '.35rem'
             }}>
               Contraseña
             </label>
@@ -133,17 +140,16 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Botón */}
           <button
             onClick={handleLogin}
             disabled={loading}
             style={{
               width: '100%', padding: '.75rem',
-              background: loading ? '#FDA97A' : '#ea580c',
+              background: loading ? '#93B9E0' : '#0F539C',
               color: 'white', border: 'none',
               borderRadius: '6px', fontSize: '1rem',
               fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
-              marginTop: '.5rem'
+              marginTop: '.5rem', transition: 'background .2s'
             }}
           >
             {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
@@ -151,16 +157,18 @@ export default function LoginPage() {
 
         </div>
 
-        {/* Spinner */}
         {loading && <div style={{ marginTop: '1rem' }}><LoadingSpinner /></div>}
 
-        {/* Nota simulado */}
-        <p style={{
-          marginTop: '1.5rem', fontSize: '.75rem',
-          color: '#94A3B8', textAlign: 'center'
+        {/* Credenciales de prueba */}
+        <div style={{
+          marginTop: '1.5rem', padding: '.85rem',
+          background: '#EFF6FF', border: '1px solid #BFDBFE',
+          borderRadius: '6px', fontSize: '.78rem', color: '#1D4ED8'
         }}>
-          * Modo simulado: usa cualquier email válido y contraseña de 4+ caracteres
-        </p>
+          <strong>Credenciales de prueba:</strong><br />
+          📧 admin@digesett.gob.do<br />
+          🔑 (la contraseña del seed)
+        </div>
 
       </div>
     </div>

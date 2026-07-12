@@ -1,14 +1,12 @@
 import axios from 'axios';
 
-// ── Instancia base ────────────────────────────────────
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 10000, // 10 segundos 
+  timeout: 10000,
 });
 
-// ── Interceptor de REQUEST ────────────────────────────
-// Adjunta el JWT automáticamente en cada petición
+// Interceptor de REQUEST — lee el token en cada petición, no solo al inicio
 axiosClient.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('token');
   if (token) {
@@ -17,13 +15,11 @@ axiosClient.interceptors.request.use((config) => {
   return config;
 });
 
-// ── Interceptor de RESPONSE ───────────────────────────
-// Manejo global de errores
+// Interceptor de RESPONSE — manejo global de errores
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Sesión expirada — limpiar y redirigir al login
       sessionStorage.removeItem('token');
       window.location.href = '/login';
     }
