@@ -58,19 +58,7 @@ export default function LoginPage() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{
-            width: '56px', height: '56px', borderRadius: '12px',
-            background: '#0F539C', display: 'flex',
-            alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 1rem'
-          }}>
-            <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
-              <path d="M18 4 L32 11 L32 25 C32 31 18 36 18 36 C18 36 4 31 4 25 L4 11 Z"
-                    fill="none" stroke="white" strokeWidth="2"/>
-              <text x="18" y="24" textAnchor="middle"
-                    fill="white" fontSize="11" fontWeight="700" fontFamily="serif">DG</text>
-            </svg>
-          </div>
+          <img src="/logo_digesett.jpg" alt="DIGESETT" style={{ width: '94px', height: '94px', objectFit: 'contain', margin: '0 auto 1rem', display: 'block' }} />
           <h1 style={{
             fontSize: '1.4rem', fontWeight: 800,
             color: '#0F172A', marginBottom: '.3rem'
@@ -166,11 +154,11 @@ export default function LoginPage() {
           borderRadius: '6px', fontSize: '.78rem', color: '#1D4ED8'
         }}>
           <strong>Credenciales de prueba:</strong><br />
-          📧 admin@digesett.gob.do<br />
-          🔑 (la contraseña del seed)
+          📧 admin@digesett.gob.do / 🔑 admin123<br />
+          📧 cajero1@digesett.gob.do / 🔑 cajero123<br />
+          📧 gomez.torres@digesett.gob.do / 🔑 agente123
         </div>
 
-        
       </div>
     </div>
   );

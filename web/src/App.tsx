@@ -7,13 +7,14 @@ import LoginPage        from './pages/LoginPage';
 import DashboardPage    from './pages/DashboardPage';
 import PagarPage        from './pages/PagarPage';
 import ReciboPage       from './pages/ReciboPage';
+import HomePage         from './pages/HomePage';
 
 export default function App() {
   return (
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="/" element={<Navigate to="/consulta" replace />} />
+          <Route path="/" element={<HomePage />} />
 
           {/* Públicas */}
           <Route path="/consulta"   element={<ConsultaPage />}   />
@@ -31,7 +32,7 @@ export default function App() {
             <ProtectedRoute><ReciboPage /></ProtectedRoute>
           } />
 
-          <Route path="*" element={<Navigate to="/consulta" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
     </BrowserRouter>
