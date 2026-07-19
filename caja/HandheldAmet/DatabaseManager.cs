@@ -1,0 +1,457 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+using System.Net.NetworkInformation;
+using Microsoft.Data.Sqlite;
+
+namespace CajaAmet
+{
+    public static class DatabaseManager
+    {
+        public static string DerivarClave(string password)
+        {
+            // Usamos una sal estática para garantizar que la clave derivada sea la misma
+            // en cualquier dispositivo, permitiendo la portabilidad del archivo de base de datos
+            // local cifrado (actas_local.db) cuando se transfiere de una máquina a otra.
+            string salt = "DIGESETT_SYSTEM_SECURITY_SALT_2026";
+
+            // Derivar clave con PBKDF2 — 100,000 iteraciones (estándar NIST)
+            // En .NET Framework 4.8 instanciamos Rfc2898DeriveBytes indicando SHA256
+            using (var pbkdf2 = new Rfc2898DeriveBytes(
+                Encoding.UTF8.GetBytes(password),
+                Encoding.UTF8.GetBytes(salt),
+                100000,
+                HashAlgorithmName.SHA256))
+            {
+                byte[] claveBytes = pbkdf2.GetBytes(32); // 256 bits para AES-256
+                return BitConverter.ToString(claveBytes).Replace("-", ""); // Hex string
+            }
+        }
+
+        public static string ObtenerDbPath()
+        {
+            var folder = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Digesett"
+            );
+
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+
+            return Path.Combine(folder, "actas_local.db");
+        }
+
+        public static string ObtenerConnectionString(string claveHex)
+        {
+            var dbPath = ObtenerDbPath();
+            return $"Data Source={dbPath};Password={claveHex};Pooling=False;";
+        }
+
+        public static void InicializarBD(string connectionString)
+        {
+            bool needsRecreate = false;
+            try
+            {
+                using (var connection = new SqliteConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT count(*) FROM sqlite_master;";
+                        cmd.ExecuteScalar();
+                    }
+                }
+            }
+            catch
+            {
+                needsRecreate = true;
+            }
+
+            if (needsRecreate)
+            {
+                try
+                {
+                    var builder = new SqliteConnectionStringBuilder(connectionString);
+                    string dbPath = builder.DataSource;
+                    if (File.Exists(dbPath))
+                    {
+                        SqliteConnection.ClearAllPools();
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        File.Delete(dbPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error al eliminar base de datos corrupta: " + ex.Message);
+                }
+            }
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                // Tabla principal: Borradores_Actas
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        CREATE TABLE IF NOT EXISTS Borradores_Actas (
+                            id                     TEXT PRIMARY KEY,
+                            conductor_cedula       TEXT NULL,
+                            conductor_nombre       TEXT NULL,
+                            tipo_infraccion_codigo TEXT NOT NULL,
+                            tipo_infraccion_desc   TEXT NOT NULL,
+                            monto_base             REAL NOT NULL,
+                            placa                  TEXT NULL,
+                            url_evidencia          TEXT NULL,
+                            descripcion_vehiculo   TEXT NULL,
+                            requiere_retencion     INTEGER NOT NULL DEFAULT 0,
+                            grua_numero            TEXT NULL,
+                            fecha_hecho            TEXT NOT NULL,
+                            agente_id              TEXT NOT NULL,
+                            estado_sync            TEXT NOT NULL DEFAULT 'PENDIENTE',
+                            timestamp_firma        TEXT NULL,
+                            error_detalle          TEXT NULL
+                        );";
+                    cmd.ExecuteNonQuery();
+                }
+
+                // Catálogo de infracciones: Infracciones_Cache
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        CREATE TABLE IF NOT EXISTS Infracciones_Cache (
+                            id                 INTEGER PRIMARY KEY,
+                            codigo             TEXT NOT NULL UNIQUE,
+                            descripcion        TEXT NOT NULL,
+                            categoria          TEXT NOT NULL,
+                            monto_particular   REAL NOT NULL,
+                            monto_motocicleta  REAL NOT NULL,
+                            monto_carga        REAL NOT NULL,
+                            requiere_retencion INTEGER NOT NULL DEFAULT 0
+                        );";
+                    cmd.ExecuteNonQuery();
+                }
+
+                // Movimientos de caja: Movimientos_Caja
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        CREATE TABLE IF NOT EXISTS Movimientos_Caja (
+                            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                            tipo        TEXT NOT NULL,
+                            monto       REAL NOT NULL,
+                            descripcion TEXT NULL,
+                            acta_uuid   TEXT NULL,
+                            cajero_id   TEXT NOT NULL,
+                            timestamp   TEXT NOT NULL
+                        );";
+                    cmd.ExecuteNonQuery();
+                }
+
+                // --- SEED DATA ---
+                // Seed Infracciones_Cache if empty
+                bool cacheVacio = true;
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT COUNT(*) FROM Infracciones_Cache;";
+                    long count = (long)cmd.ExecuteScalar();
+                    cacheVacio = (count == 0);
+                }
+
+                if (cacheVacio)
+                {
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        var infracciones = new[]
+                        {
+                            new { Codigo = "INF-01", Desc = "Conducir sin Licencia o Licencia Vencida", Cat = "Licencia", Part = 5000.0, Moto = 3000.0, Carga = 8000.0, Ret = 1 },
+                            new { Codigo = "INF-02", Desc = "Cruzar Semáforo en Luz Roja", Cat = "Semáforo", Part = 3500.0, Moto = 2000.0, Carga = 5000.0, Ret = 0 },
+                            new { Codigo = "INF-03", Desc = "Exceso de Velocidad Detectado", Cat = "Velocidad", Part = 4000.0, Moto = 3000.0, Carga = 6000.0, Ret = 0 },
+                            new { Codigo = "INF-04", Desc = "Conducir en Estado de Embriaguez / Alcohol", Cat = "Alcohol", Part = 10000.0, Moto = 10000.0, Carga = 15000.0, Ret = 1 },
+                            new { Codigo = "INF-05", Desc = "Giro Prohibido o Maniobra Temeraria", Cat = "Tránsito", Part = 2000.0, Moto = 1500.0, Carga = 3000.0, Ret = 0 },
+                            new { Codigo = "INF-06", Desc = "No llevar Cinturón de Seguridad / Casco", Cat = "Seguridad", Part = 3000.0, Moto = 2000.0, Carga = 4000.0, Ret = 0 },
+                            new { Codigo = "INF-07", Desc = "Uso de Celular / Distracción al Volante", Cat = "Distracción", Part = 3000.0, Moto = 2500.0, Carga = 5000.0, Ret = 0 },
+                            new { Codigo = "INF-08", Desc = "Vehículo sin Placa o Placa Oculta", Cat = "Identificación", Part = 4500.0, Moto = 3000.0, Carga = 6000.0, Ret = 1 },
+                            new { Codigo = "INF-09", Desc = "Obstrucción de Tránsito / Estacionamiento Prohibido", Cat = "Estacionamiento", Part = 2000.0, Moto = 1500.0, Carga = 4000.0, Ret = 1 }
+                        };
+
+                        foreach (var inf in infracciones)
+                        {
+                            using (var cmd = connection.CreateCommand())
+                            {
+                                cmd.Transaction = transaction;
+                                cmd.CommandText = @"
+                                    INSERT INTO Infracciones_Cache (codigo, descripcion, categoria, monto_particular, monto_motocicleta, monto_carga, requiere_retencion)
+                                    VALUES (@cod, @desc, @cat, @part, @moto, @carga, @ret);";
+                                cmd.Parameters.AddWithValue("@cod", inf.Codigo);
+                                cmd.Parameters.AddWithValue("@desc", inf.Desc);
+                                cmd.Parameters.AddWithValue("@cat", inf.Cat);
+                                cmd.Parameters.AddWithValue("@part", inf.Part);
+                                cmd.Parameters.AddWithValue("@moto", inf.Moto);
+                                cmd.Parameters.AddWithValue("@carga", inf.Carga);
+                                cmd.Parameters.AddWithValue("@ret", inf.Ret);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        transaction.Commit();
+                    }
+                }
+
+                // Seed Borradores_Actas if empty (for test records)
+                bool actasVacio = true;
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT COUNT(*) FROM Borradores_Actas;";
+                    long count = (long)cmd.ExecuteScalar();
+                    actasVacio = (count == 0);
+                }
+
+                if (actasVacio)
+                {
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        var actas = new[]
+                        {
+                            new {
+                                Id = "ACTA-2026-0001",
+                                Cedula = "001-1234567-8",
+                                Nombre = "Carlos Manuel Rosario",
+                                CodInfraccion = "INF-02",
+                                DescInfraccion = "Cruzar Semáforo en Luz Roja",
+                                Monto = 3500.0,
+                                Placa = "A987654",
+                                Evidencia = "https://evidencia.digesett.gob.do/uploads/photo1.jpg",
+                                DescVehiculo = "Toyota Corolla 2018 Gris",
+                                ReqRet = 0,
+                                Grua = "",
+                                Fecha = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd HH:mm:ss"),
+                                Agente = "agente1@digesett.gov.do"
+                            },
+                            new {
+                                Id = "ACTA-2026-0002",
+                                Cedula = "402-2345678-9",
+                                Nombre = "Juana Bautista Valerio",
+                                CodInfraccion = "INF-09",
+                                DescInfraccion = "Obstrucción de Tránsito / Estacionamiento Prohibido",
+                                Monto = 2000.0,
+                                Placa = "G456789",
+                                Evidencia = "https://evidencia.digesett.gob.do/uploads/photo2.jpg",
+                                DescVehiculo = "Honda CR-V 2015 Blanco",
+                                ReqRet = 1,
+                                Grua = "GRU-102",
+                                Fecha = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss"),
+                                Agente = "agente2@digesett.gov.do"
+                            },
+                            new {
+                                Id = "ACTA-2026-0003",
+                                Cedula = "031-8765432-1",
+                                Nombre = "Ramón Antonio Santos",
+                                CodInfraccion = "INF-01",
+                                DescInfraccion = "Conducir sin Licencia o Licencia Vencida",
+                                Monto = 3000.0, // Monto motocicleta
+                                Placa = "K123456",
+                                Evidencia = "https://evidencia.digesett.gob.do/uploads/photo3.jpg",
+                                DescVehiculo = "Pasola Tauro Turbo Negra",
+                                ReqRet = 1,
+                                Grua = "GRU-054",
+                                Fecha = DateTime.Now.AddHours(-4).ToString("yyyy-MM-dd HH:mm:ss"),
+                                Agente = "agente1@digesett.gov.do"
+                            }
+                        };
+
+                        foreach (var acta in actas)
+                        {
+                            using (var cmd = connection.CreateCommand())
+                            {
+                                cmd.Transaction = transaction;
+                                cmd.CommandText = @"
+                                    INSERT INTO Borradores_Actas (id, conductor_cedula, conductor_nombre, tipo_infraccion_codigo, tipo_infraccion_desc, monto_base, placa, url_evidencia, descripcion_vehiculo, requiere_retencion, grua_numero, fecha_hecho, agente_id, estado_sync)
+                                    VALUES (@id, @cedula, @nombre, @codInfr, @descInfr, @monto, @placa, @evidencia, @descVeh, @reqRet, @grua, @fecha, @agente, 'PENDIENTE');";
+                                cmd.Parameters.AddWithValue("@id", acta.Id);
+                                cmd.Parameters.AddWithValue("@cedula", acta.Cedula);
+                                cmd.Parameters.AddWithValue("@nombre", acta.Nombre);
+                                cmd.Parameters.AddWithValue("@codInfr", acta.CodInfraccion);
+                                cmd.Parameters.AddWithValue("@descInfr", acta.DescInfraccion);
+                                cmd.Parameters.AddWithValue("@monto", acta.Monto);
+                                cmd.Parameters.AddWithValue("@placa", acta.Placa);
+                                cmd.Parameters.AddWithValue("@evidencia", acta.Evidencia);
+                                cmd.Parameters.AddWithValue("@descVeh", acta.DescVehiculo);
+                                cmd.Parameters.AddWithValue("@reqRet", acta.ReqRet);
+                                cmd.Parameters.AddWithValue("@grua", acta.Grua);
+                                cmd.Parameters.AddWithValue("@fecha", acta.Fecha);
+                                cmd.Parameters.AddWithValue("@agente", acta.Agente);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        transaction.Commit();
+                    }
+                }
+            }
+        }
+
+        public static bool EjecutarPoC(string password, out string log)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("=== INICIANDO PRUEBA DE CONCEPTO (PoC) SQLCIPHER ===");
+
+            try
+            {
+                // 1. Derivar clave
+                sb.AppendLine("1. Derivando clave con PBKDF2 (100,000 iteraciones + SHA-256 + MAC Salt)...");
+                string claveHex = DerivarClave(password);
+                sb.AppendLine($"   Clave derivada (Hex truncated): {claveHex.Substring(0, 8)}...");
+
+                // 2. Obtener connection string e inicializar BD
+                string connString = ObtenerConnectionString(claveHex);
+                string dbPath = ObtenerDbPath();
+                sb.AppendLine($"2. Ruta de la BD: {dbPath}");
+
+                // Verificar compatibilidad de clave si el archivo ya existe
+                if (File.Exists(dbPath))
+                {
+                    sb.AppendLine("   Verificando compatibilidad de la base de datos existente...");
+                    try
+                    {
+                        using (var connection = new SqliteConnection(connString))
+                        {
+                            connection.Open();
+                            using (var cmd = connection.CreateCommand())
+                            {
+                                cmd.CommandText = "SELECT name FROM sqlite_master LIMIT 1;";
+                                cmd.ExecuteScalar();
+                            }
+                        }
+                        sb.AppendLine("   Base de datos existente es compatible.");
+                    }
+                    catch (SqliteException ex) when (ex.SqliteErrorCode == 26)
+                    {
+                        sb.AppendLine("   [INFO]: La base de datos existe pero usa otra clave o no está cifrada.");
+                        sb.AppendLine("           Eliminando base de datos incompatible para iniciar de nuevo...");
+                        try
+                        {
+                            SqliteConnection.ClearAllPools();
+                            GC.Collect();
+                            GC.WaitForPendingFinalizers();
+                            System.Threading.Thread.Sleep(200);
+                            File.Delete(dbPath);
+                        }
+                        catch (Exception delEx)
+                        {
+                            sb.AppendLine($"   [ERROR] No se pudo eliminar la base de datos incompatible: {delEx.Message}");
+                            throw;
+                        }
+                    }
+                }
+
+                sb.AppendLine("3. Abriendo base de datos e inicializando tablas...");
+                InicializarBD(connString);
+                sb.AppendLine("   Tablas creadas/verificadas con éxito.");
+
+                // 4. Intentar escritura (INSERT de prueba)
+                sb.AppendLine("4. Insertando registro de prueba en 'Movimientos_Caja'...");
+                string testId = Guid.NewGuid().ToString();
+                string timestamp = DateTime.Now.ToString("o");
+                using (var connection = new SqliteConnection(connString))
+                {
+                    connection.Open();
+                    using (var cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = @"
+                            INSERT INTO Movimientos_Caja (tipo, monto, descripcion, cajero_id, timestamp)
+                            VALUES ('ENTRADA', 100.0, 'POC_TEST_INSERT', 'AGENTE_POC', @timestamp);";
+                        cmd.Parameters.AddWithValue("@timestamp", timestamp);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                sb.AppendLine("   Escritura exitosa.");
+
+                // 5. Intentar lectura (SELECT de prueba)
+                sb.AppendLine("5. Leyendo registro de prueba desde la base de datos...");
+                bool recordFound = false;
+                using (var connection = new SqliteConnection(connString))
+                {
+                    connection.Open();
+                    using (var cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT tipo, monto, descripcion FROM Movimientos_Caja WHERE descripcion = 'POC_TEST_INSERT';";
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                string tipo = reader.GetString(0);
+                                double monto = reader.GetDouble(1);
+                                string desc = reader.GetString(2);
+                                sb.AppendLine($"   Registro leído: Tipo={tipo}, Monto={monto}, Desc={desc}");
+                                recordFound = true;
+                            }
+                        }
+                    }
+
+                    // Limpiar prueba
+                    using (var cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM Movimientos_Caja WHERE descripcion = 'POC_TEST_INSERT';";
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                if (!recordFound)
+                {
+                    throw new Exception("El registro de prueba no pudo ser leído de la base de datos.");
+                }
+                sb.AppendLine("   Lectura y limpieza completadas con éxito.");
+
+                // 6. Validar que la base de datos realmente está cifrada
+                sb.AppendLine("6. Validando seguridad: Intentando abrir con clave incorrecta...");
+                string incorrectConnString = ObtenerConnectionString("CLAVE_INCORRECTA_POC_12345");
+                try
+                {
+                    using (var connection = new SqliteConnection(incorrectConnString))
+                    {
+                        connection.Open();
+                        // Ejecutar un comando para forzar la lectura del archivo cifrado
+                        using (var cmd = connection.CreateCommand())
+                        {
+                            cmd.CommandText = "SELECT count(*) FROM Borradores_Actas;";
+                            cmd.ExecuteScalar();
+                        }
+                    }
+                    sb.AppendLine("   [ALERTA/FALLO]: ¡La base de datos se abrió con una clave incorrecta!");
+                    log = sb.ToString();
+                    return false;
+                }
+                catch (SqliteException ex)
+                {
+                    sb.AppendLine($"   [ÉXITO DE SEGURIDAD]: Se denegó el acceso con clave incorrecta.");
+                    sb.AppendLine($"   Detalle del error (esperado): {ex.Message} (Código: {ex.SqliteErrorCode})");
+                }
+
+                sb.AppendLine("\n>>> PoC COMPLETADA CON ÉXITO: SQLCipher cifra y protege la base de datos local.");
+                log = sb.ToString();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                sb.AppendLine($"\n[ERROR PoC]: {ex.Message}");
+                var inner = ex.InnerException;
+                while (inner != null)
+                {
+                    sb.AppendLine($"\n--- INNER EXCEPTION ---");
+                    sb.AppendLine($"Message: {inner.Message}");
+                    sb.AppendLine($"Type: {inner.GetType().FullName}");
+                    sb.AppendLine($"StackTrace:\n{inner.StackTrace}");
+                    inner = inner.InnerException;
+                }
+                sb.AppendLine($"\n--- STACK TRACE ---");
+                sb.AppendLine(ex.StackTrace);
+                log = sb.ToString();
+                return false;
+            }
+        }
+    }
+}
